@@ -1,26 +1,35 @@
-# Documentação Nuvem Brasil
+# Nuvem Brasil
 
-**Para quem é este diretório:** desenvolvedores, arquitetos, gestores públicos, cidadãos interessados — qualquer pessoa que queira entender o que é, como funciona e como contribuir com a Nuvem Brasil.
+**Ferramentas digitais livres para a população brasileira.**
 
-Toda a documentação é escrita em português claro, com explicações para conceitos técnicos. Termos inevitáveis estão no [Glossário](GLOSSARIO.md).
+A Nuvem Brasil é uma iniciativa open-source que desenvolve ferramentas digitais
+acessíveis, de baixo custo e centradas no cidadão — priorizando usabilidade,
+transparência e confiança pública.
 
-## Conteúdo
+## Princípios
 
-| Arquivo / Pasta | O que contém |
-|---|---|
-| [Guia do Projeto](GUIA-DO-PROJETO.md) | Visão, objetivos, valores e contexto da iniciativa |
-| [Glossário](GLOSSARIO.md) | Definições de termos técnicos em linguagem simples |
-| [Monorrepo](MONORREPO.md) | Convenções de diretórios, nomeação e fluxo de trabalho |
-| [Arquitetura/](Arquitetura/README.md) | Decisões arquiteturais e visão geral do sistema |
-| [Infraestrutura/](Infraestrutura/README.md) | Cloud, rede, provedores e topologia |
-| [Automação/](Automacao/README.md) | CI/CD, IaC e cenários BDD para testes |
-| [Guias/](Guias/README.md) | Guias práticos para diferentes públicos |
+- **Código aberto** — Todo o código é público, auditável e livre para contribuições
+- **Usabilidade primeiro** — Ferramentas feitas para qualquer pessoa usar, sem barreiras técnicas
+- **Baixo custo** — Arquitetura eficiente que minimiza custos operacionais
+- **Transparência total** — Decisões, código e custos documentados abertamente
 
-## Convenções
+## Projetos
 
-Este repositório segue as convenções descritas em [MONORREPO.md](MONORREPO.md). Resumo:
+<!-- Lista de aplicações e serviços será preenchida conforme a iniciativa crescer -->
 
-- **Idioma da documentação:** português brasileiro, com acentos e cedilha
-- **Idioma do código:** inglês inicialmente, com migração gradual para português
-- **Nomes de arquivo:** hífen (`-`) como separador; `README.md` mantido para renderização no GitHub
-- **Documentação orientada a cenários:** fluxos descritos em BDD para gerar testes automatizados no futuro (veja [BDD.md](Automacao/BDD.md))
+## Como contribuir
+
+<!-- Guia de contribuição -->
+
+## Licença
+
+Copyright (C) 2025 Nuvem Brasil
+
+Este programa é software livre: você pode redistribuí-lo e/ou modificá-lo
+sob os termos da GNU Affero General Public License (AGPL) versão 3,
+conforme publicada pela Free Software Foundation.
+
+Este programa é distribuído na esperança de que seja útil, mas SEM
+QUALQUER GARANTIA; sem mesmo a garantia implícita de COMERCIALIZAÇÃO
+ou ADEQUAÇÃO A UM PROPÓSITO PARTICULAR. Veja a GNU Affero General
+Public License para mais detalhes.
