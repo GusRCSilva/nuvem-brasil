@@ -35,7 +35,8 @@ format:
 clean:
     -podman compose down -v
     rm -rf .pytest_cache .mypy_cache .ruff_cache
-    find . -type d -name __pycache__ -exec rm -rf {} +
+    -find . -not -path './volumes/*' -type d -name __pycache__ -exec rm -rf {} +
+    -podman unshare rm -rf volumes/postgres
 
 run:
     uv run uvicorn gusmail.api.main:app --reload
