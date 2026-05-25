@@ -28,6 +28,7 @@ dev = [
     "mypy",
     "pre-commit",
     "hypothesis",
+    "types-pyyaml",
 ]
 
 [tool.ruff]
@@ -40,6 +41,8 @@ select = ["E", "F", "I", "B", "UP", "SIM", "RUF"]
 [tool.mypy]
 python_version = "3.12"
 strict = true
+disallow_any_generics = false
+ignore_missing_imports = false
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

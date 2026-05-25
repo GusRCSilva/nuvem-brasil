@@ -1,21 +1,21 @@
-from typing import Literal
+from typing import Any, Literal
 
 from pydantic import BaseModel, Field
 
 
 class GivenClause(BaseModel):
     description: str
-    setup: dict = Field(default_factory=dict)
+    setup: dict[str, Any] = Field(default_factory=dict)
 
 
 class WhenClause(BaseModel):
     description: str
-    action: dict = Field(default_factory=dict)
+    action: dict[str, Any] = Field(default_factory=dict)
 
 
 class ThenAssertion(BaseModel):
     description: str
-    check: dict = Field(default_factory=dict)
+    check: dict[str, Any] = Field(default_factory=dict)
 
 
 class SLO(BaseModel):
