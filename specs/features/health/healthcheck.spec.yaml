@@ -1,0 +1,38 @@
+feature: healthcheck_endpoint
+priority: P0
+category: health
+description: |
+  O servidor expõe /healthz que retorna 200 quando o processo está vivo.
+  É a spec mais simples possível e prova que o pipeline spec → teste →
+  código → verde funciona ponta a ponta.
+
+kpi_links:
+  - service_uptime
+
+slo:
+  p95_latency_ms: 50
+  availability: 0.999
+
+given:
+  - description: "O servidor HTTP está rodando"
+    setup:
+      service: api
+
+when:
+  - description: "Cliente faz GET em /healthz"
+    action:
+      method: GET
+      path: /healthz
+
+then:
+  - description: "Status HTTP é 200"
+    check:
+      status_code: 200
+  - description: "Body contém status ok"
+    check:
+      json_contains:
+        status: ok
+
+invariants:
+  - "Endpoint nunca depende de banco de dados"
+  - "Endpoint nunca expõe informação sensível"
