@@ -18,7 +18,8 @@ console = Console()
 def test_file_for_spec(spec_path: str) -> str | None:
     rel = os.path.relpath(spec_path, "specs/features")
     dir_part, stem = os.path.split(rel)
-    test_name = f"test_{dir_part.replace(os.sep, '_')}_{os.path.splitext(stem)[0]}.py"
+    stem_no_ext = stem.replace(".spec.yaml", "")
+    test_name = f"test_{dir_part.replace(os.sep, '_')}_{stem_no_ext}.py"
     test_path = os.path.join("tests", "from_specs", test_name)
     return test_path if os.path.exists(test_path) else None
 
