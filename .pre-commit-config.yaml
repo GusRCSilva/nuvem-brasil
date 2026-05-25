@@ -5,7 +5,7 @@ repos:
       - id: ruff-format
       - id: ruff-check
   - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.16.0
+    rev: v2.1.0
     hooks:
       - id: mypy
         args: ["--strict"]
@@ -17,6 +17,7 @@ repos:
           - rich
           - pyyaml
           - httpx
+          - types-pyyaml
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v5.0.0
     hooks:
