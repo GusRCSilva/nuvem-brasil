@@ -1,0 +1,35 @@
+[project]
+name = "gusmail"
+version = "0.1.0"
+description = "Servidor de e-mail desenvolvido sob Spec-Driven Development"
+authors = [
+    { name = "Gustavo Silva", email = "gustavo.rodrigues.cayres@proton.me" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi",
+    "uvicorn[standard]",
+    "pydantic>=2",
+    "pyyaml",
+    "typer",
+    "rich",
+]
+
+[project.scripts]
+gusmail = "gusmail:main"
+
+[dependency-groups]
+dev = [
+    "pytest",
+    "pytest-asyncio",
+    "pytest-bdd",
+    "httpx",
+    "ruff",
+    "mypy",
+    "pre-commit",
+    "hypothesis",
+]
+
+[build-system]
+requires = ["uv_build>=0.11.14,<0.12.0"]
+build-backend = "uv_build"
