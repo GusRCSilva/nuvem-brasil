@@ -15,7 +15,7 @@ jobs:
     name: Lint & Type-check
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Install uv
         uses: astral-sh/setup-uv@v5
@@ -38,7 +38,7 @@ jobs:
     name: Spec Validation
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Install uv
         uses: astral-sh/setup-uv@v5
@@ -56,7 +56,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [lint, spec-validate]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Install uv
         uses: astral-sh/setup-uv@v5
