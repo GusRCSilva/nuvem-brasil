@@ -1,0 +1,20 @@
+feature: tool_list_folders
+priority: P1
+category: email-server/mcp-server
+description: |
+  Agente MCP autenticado pode listar todas as pastas de email do
+  usuário usando a tool list_folders, retornando a hierarquia completa.
+
+given:
+  - description: "Agente MCP está autenticado com escopo folders:read"
+
+when:
+  - description: "Agente chama list_folders"
+
+then:
+  - description: "Retorna hierarquia completa de pastas do usuário"
+  - description: "Cada pasta inclui id, nome, parent_id (se subpasta), total de emails e total de não lidos"
+  - description: "Pastas padrão (Inbox, Enviados, Rascunhos, Lixeira, Spam) são sempre incluídas"
+
+invariants:
+  - "Apenas pastas pertencentes ao usuário autenticado são retornadas"

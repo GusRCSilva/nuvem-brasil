@@ -1,0 +1,49 @@
+feature: pesquisar_emails
+priority: P0
+category: email-server/inbox
+description: |
+  Pesquisa textual na caixa de entrada.
+  O termo de busca é comparado contra remetente, assunto e corpo dos emails.
+  A pesquisa é case-insensitive e retorna resultados paginados.
+
+given:
+  - description: "Usuário está autenticado e possui emails na caixa de entrada"
+    setup:
+      service: api
+      auth: bearer_token
+      pre_existing:
+        emails:
+          - assunto: "Relatório Financeiro Q1"
+            remetente: "financas@empresa.com"
+            corpo: "Segue o relatório do primeiro trimestre."
+
+when:
+  - description: "Usuário digita termo na barra de pesquisa e pressiona Enter"
+    action:
+      method: GET
+      path: /api/inbox/search
+      query:
+        q: "relatório"
+
+then:
+  - description: "Status HTTP é 200"
+    check:
+      status_code: 200
+  - description: "Retorna apenas emails cujo remetente, assunto ou corpo contém o termo"
+    check:
+      json_contains:
+        emails: []
+  - description: "Email com assunto 'Relatório Financeiro Q1' aparece nos resultados"
+    check:
+      json_contains:
+        emails:
+          - assunto: "Relatório Financeiro Q1"
+  - description: "Pesquisa é case-insensitive"
+    check:
+      json_contains:
+        emails:
+          - assunto: "Relatório Financeiro Q1"
+
+invariants:
+  - "Pesquisa nunca cruza os emails de diferentes usuários"
+  - "Termo vazio retorna a listagem completa"

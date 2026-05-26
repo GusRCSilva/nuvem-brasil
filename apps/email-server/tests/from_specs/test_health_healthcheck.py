@@ -1,7 +1,7 @@
 """Tests derived from specs/features/health/healthcheck.spec.yaml"""
-from fastapi.testclient import TestClient
 
-from gusmail.api.main import app
+from email_server.api.main import app
+from fastapi.testclient import TestClient
 
 client = TestClient(app)
 

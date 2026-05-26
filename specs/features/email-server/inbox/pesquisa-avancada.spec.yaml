@@ -1,0 +1,54 @@
+feature: pesquisa_avancada
+priority: P2
+category: email-server/inbox
+description: |
+  Pesquisa com filtros avançados na caixa de entrada.
+  O usuário pode combinar filtros como remetente, destinatário, assunto,
+  intervalo de datas e presença de anexos. Todos os filtros são aplicados
+  em conjunto (AND lógico).
+
+given:
+  - description: "Usuário está autenticado e possui emails variados na caixa de entrada"
+    setup:
+      service: api
+      auth: bearer_token
+      pre_existing:
+        emails:
+          - remetente: "joao@empresa.com"
+            assunto: "Orçamento 2026"
+            data: "2026-01-15"
+            tem_anexo: true
+          - remetente: "maria@empresa.com"
+            assunto: "Orçamento 2026"
+            data: "2026-05-01"
+            tem_anexo: false
+
+when:
+  - description: "Usuário aplica filtros de: remetente, assunto e intervalo de datas"
+    action:
+      method: GET
+      path: /api/inbox/search
+      query:
+        de: "joao@empresa.com"
+        assunto: "Orçamento"
+        data_inicio: "2026-01-01"
+        data_fim: "2026-03-31"
+
+then:
+  - description: "Status HTTP é 200"
+    check:
+      status_code: 200
+  - description: "Retorna apenas emails que correspondem a todos os filtros simultaneamente"
+    check:
+      json_length:
+        emails: 1
+  - description: "O email retornado tem remetente joao@empresa.com"
+    check:
+      json_contains:
+        emails:
+          - remetente: "joao@empresa.com"
+
+invariants:
+  - "Filtros não especificados não restringem a busca"
+  - "Intervalo de datas sem data_fim usa a data atual como limite"
+  - "Filtro 'anexo:sim' exclui emails sem anexos; 'anexo:nao' exclui emails com anexos"

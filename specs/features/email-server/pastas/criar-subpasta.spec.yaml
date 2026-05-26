@@ -1,0 +1,37 @@
+feature: criar_subpasta
+priority: P1
+category: email-server/pastas
+description: |
+  O usuário pode criar subpastas aninhadas sob pastas existentes
+  para uma organização hierárquica mais detalhada.
+
+given:
+  - description: "Usuário possui uma pasta existente 'Projetos'"
+    setup:
+      pasta_existente: "Projetos"
+
+when:
+  - description: "Clica com botão direito na pasta 'Projetos'"
+    action:
+      click_direito: pasta "Projetos"
+  - description: "Seleciona a opção 'Nova subpasta'"
+    action:
+      selecionar_menu: "Nova subpasta"
+  - description: "Digita o nome da subpasta e confirma"
+    action:
+      input:
+        campo: nome_subpasta
+        valor: "Projeto Alpha"
+
+then:
+  - description: "Subpasta é criada aninhada sob a pasta principal"
+    check:
+      subpasta_de: ["Projeto Alpha", "Projetos"]
+  - description: "Subpasta aparece indentada na barra lateral"
+    check:
+      pasta_indentada: "Projeto Alpha"
+
+invariants:
+  - "Subpasta herda o namespace da pasta pai"
+  - "Não é permitido criar subpasta dentro da Lixeira ou Spam"
+  - "Profundidade máxima de aninhamento é 10 níveis"

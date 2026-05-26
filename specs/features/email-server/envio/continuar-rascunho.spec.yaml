@@ -1,0 +1,40 @@
+feature: continuar_rascunho
+priority: P0
+category: email-server/envio
+description: |
+  O usuário pode abrir um rascunho salvo na pasta "Rascunhos" e continuar
+  a edição com todo o conteúdo preservado, podendo editar e enviar normalmente.
+
+given:
+  - description: "Tenho um rascunho salvo na pasta 'Rascunhos'"
+    setup:
+      preconditions:
+        draft_exists: true
+        draft_fields:
+          para: destinatario@exemplo.com
+          assunto: Assunto do rascunho
+          corpo: Corpo do rascunho.
+
+when:
+  - description: "Abro a pasta 'Rascunhos'"
+    action:
+      type: navigate
+      target: Rascunhos
+  - description: "Clico no rascunho salvo"
+    action:
+      type: click
+      target: draft_email_item
+
+then:
+  - description: "O editor abre com todo o conteúdo do rascunho preenchido"
+    check:
+      editor_opened: true
+      field_para: destinatario@exemplo.com
+      field_assunto: Assunto do rascunho
+      field_corpo: Corpo do rascunho.
+  - description: "Posso editar os campos livremente"
+    check:
+      fields_editable: true
+  - description: "Posso enviar o email após as edições"
+    check:
+      send_enabled: true

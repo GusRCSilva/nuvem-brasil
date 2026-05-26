@@ -1,0 +1,54 @@
+feature: formatacao_rica
+priority: P2
+category: email-server/envio
+description: |
+  Durante a composição de um email, o usuário pode utilizar a barra de
+  formatação para aplicar estilos ao corpo do email, incluindo negrito,
+  itálico, sublinhado, listas, links e outros estilos de texto.
+
+given:
+  - description: "Estou compondo um email no editor"
+    setup:
+      page: email-compose-editor
+  - description: "A barra de formatação está visível no editor"
+    setup:
+      toolbar_visible: true
+
+when:
+  - description: "Seleciono texto no corpo e aplico negrito pela barra de formatação"
+    action:
+      type: format
+      style: bold
+      text: texto importante
+  - description: "Seleciono texto e aplico itálico"
+    action:
+      type: format
+      style: italic
+      text: texto destacado
+  - description: "Crio uma lista não ordenada no corpo"
+    action:
+      type: format
+      style: unordered_list
+  - description: "Insiro um link no corpo do email"
+    action:
+      type: format
+      style: link
+      url: https://exemplo.com
+
+then:
+  - description: "Texto em negrito é aplicado corretamente"
+    check:
+      style_applied:
+        bold: true
+  - description: "Texto em itálico é aplicado corretamente"
+    check:
+      style_applied:
+        italic: true
+  - description: "Lista com marcadores é criada"
+    check:
+      style_applied:
+        list_present: true
+  - description: "Link é inserido e clicável"
+    check:
+      style_applied:
+        link_present: true

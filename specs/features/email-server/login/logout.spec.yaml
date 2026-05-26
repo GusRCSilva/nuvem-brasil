@@ -1,0 +1,29 @@
+feature: logout
+priority: P0
+category: email-server/login
+description: |
+  Encerramento de sessão autenticada.
+  O usuário pode encerrar sua sessão a qualquer momento
+  e é redirecionado à página de login.
+
+given:
+  - description: "Estou autenticado"
+    setup:
+      pre_condition: usuario_autenticado
+
+when:
+  - description: "Clico em \"Sair\""
+    action:
+      type: click
+      target: botao_sair
+
+then:
+  - description: "Sessão é encerrada"
+    check:
+      session_valid: false
+  - description: "Sou redirecionado à página de login"
+    check:
+      redirect_path: /login
+
+invariants:
+  - "Logout invalida tokens de sessão e refresh tokens"

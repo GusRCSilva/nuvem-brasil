@@ -1,0 +1,41 @@
+feature: aplicar_filtro_existentes
+priority: P2
+category: email-server/pastas
+description: |
+  Após criar um filtro, o usuário pode optar por aplicá-lo
+  retroativamente aos emails já existentes na caixa.
+
+given:
+  - description: "Usuário acabou de criar um novo filtro"
+    setup:
+      filtro_recem_criado: true
+  - description: "Existem emails na caixa de entrada que atendem às condições do filtro"
+    setup:
+      emails_correspondentes: presente
+
+when:
+  - description: "Seleciona a opção 'Aplicar a emails existentes'"
+    action:
+      marcar_checkbox: "Aplicar a emails existentes"
+  - description: "Confirma a criação do filtro"
+    action:
+      click: botao_salvar
+
+then:
+  - description: "Filtro é criado e ativado"
+    check:
+      filtro_ativo: true
+  - description: "Emails existentes que atendem às condições são processados"
+    check:
+      emails_processados:
+        filtro_id: criado
+        acao_executada: mover_para_pasta
+  - description: "Emails são removidos da caixa de entrada e movidos para a pasta de destino"
+    check:
+      emails_movidos:
+        origem: "Caixa de entrada"
+        destino: pasta_filtro
+
+invariants:
+  - "Aplicação retroativa não duplica emails já movidos anteriormente"
+  - "Operação retroativa é executada em background se houver muitos emails"

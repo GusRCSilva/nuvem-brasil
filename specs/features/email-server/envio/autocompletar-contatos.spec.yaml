@@ -1,0 +1,41 @@
+feature: autocompletar_contatos
+priority: P1
+category: email-server/envio
+description: |
+  Durante a composição de um email, ao digitar no campo "Para", o sistema
+  exibe sugestões de contatos e emails frequentes, permitindo seleção rápida
+  a partir da lista de autocompletar.
+
+given:
+  - description: "Estou compondo um email no editor"
+    setup:
+      page: email-compose-editor
+  - description: "Possuo contatos salvos e histórico de emails frequentes"
+    setup:
+      contacts:
+        - nome: João Silva
+          email: joao@exemplo.com
+        - nome: Maria Souza
+          email: maria@exemplo.com
+
+when:
+  - description: "Começo a digitar 'jo' no campo 'Para'"
+    action:
+      field: para
+      type_input: "jo"
+
+then:
+  - description: "Sugestões de contatos aparecem em uma lista dropdown"
+    check:
+      suggestions_visible: true
+  - description: "Contato 'João Silva' aparece como sugestão"
+    check:
+      suggestion_contains:
+        name: João Silva
+        email: joao@exemplo.com
+  - description: "Posso selecionar um contato da lista de sugestões"
+    check:
+      suggestion_selectable: true
+  - description: "Ao selecionar um contato, o campo 'Para' é preenchido com o email"
+    check:
+      autofill_on_select: true

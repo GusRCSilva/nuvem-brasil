@@ -21,12 +21,12 @@ test *args:
     uv run pytest {{args}}
 
 test-spec spec_path:
-    uv run pytest tests/from_specs/test_`echo {{spec_path}} | tr '/' '_'`.py -v
+    uv run pytest apps/email-server/tests/from_specs/test_`echo {{spec_path}} | tr '/' '_'`.py -v
 
 lint:
     uv run ruff check .
     uv run ruff format --check .
-    uv run mypy src tools
+    uv run mypy apps shared tools
 
 format:
     uv run ruff format .
@@ -39,4 +39,4 @@ clean:
     -podman unshare rm -rf volumes/postgres
 
 run:
-    uv run uvicorn gusmail.api.main:app --reload
+    uv run uvicorn email_server.api.main:app --reload

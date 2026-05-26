@@ -1,0 +1,42 @@
+feature: responder_todos
+priority: P1
+category: email-server/envio
+description: |
+  Ao responder um email que possui múltiplos destinatários, a ação "Responder
+  a todos" preenche automaticamente os campos "Para" e "CC" com todos os
+  destinatários originais (exceto o próprio usuário).
+
+given:
+  - description: "Estou lendo um email com múltiplos destinatários"
+    setup:
+      page: email-reader
+      email:
+        remetente: maria@exemplo.com
+        para:
+          - eu@exemplo.com
+          - joao@exemplo.com
+        cc:
+          - carlos@exemplo.com
+          - ana@exemplo.com
+        assunto: Atualização do projeto
+
+when:
+  - description: "Clico em 'Responder a todos'"
+    action:
+      type: click
+      target: Responder a todos
+
+then:
+  - description: "Campo 'Para' contém o remetente e demais destinatários do campo 'Para' original (exceto eu)"
+    check:
+      field_para:
+        - maria@exemplo.com
+        - joao@exemplo.com
+  - description: "Campo 'CC' contém os destinatários originais do campo 'CC'"
+    check:
+      field_cc:
+        - carlos@exemplo.com
+        - ana@exemplo.com
+  - description: "Meu próprio endereço não aparece nos destinatários"
+    check:
+      not_in_recipients: eu@exemplo.com

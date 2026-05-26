@@ -1,0 +1,21 @@
+feature: pesquisar_contatos
+priority: P1
+category: email-server/contatos
+description: |
+  O usuário pode filtrar sua lista de contatos em
+  tempo real digitando parte do nome ou email na
+  barra de pesquisa.
+
+given:
+  - description: "Tenho muitos contatos na minha lista"
+
+when:
+  - description: "Digito parte do nome ou email na barra de pesquisa de contatos"
+
+then:
+  - description: "A lista é filtrada em tempo real mostrando apenas os contatos correspondentes"
+  - description: "Contatos cujo nome ou email contém o texto digitado são exibidos"
+
+invariants:
+  - "A pesquisa é case-insensitive"
+  - "Apenas contatos do usuário autenticado são considerados na busca"

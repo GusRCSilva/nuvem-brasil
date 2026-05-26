@@ -1,0 +1,38 @@
+feature: compor_email
+priority: P0
+category: email-server/envio
+description: |
+  O usuário autenticado pode abrir o editor de composição de novo email
+  a partir do botão "Novo email", visualizando todos os campos necessários
+  para preencher e enviar uma mensagem.
+
+given:
+  - description: "Estou autenticado no servidor de email"
+    setup:
+      auth: required
+
+when:
+  - description: "Clico no botão 'Novo email'"
+    action:
+      type: click
+      target: "Novo email"
+
+then:
+  - description: "Vejo o editor de composição de email"
+    check:
+      element_present: email-compose-editor
+  - description: "Campo 'Para' está visível e editável"
+    check:
+      field_visible: para
+  - description: "Campo 'CC' está visível e editável"
+    check:
+      field_visible: cc
+  - description: "Campo 'CCo' está visível e editável"
+    check:
+      field_visible: cco
+  - description: "Campo 'Assunto' está visível e editável"
+    check:
+      field_visible: assunto
+  - description: "Campo 'Corpo' está visível e editável"
+    check:
+      field_visible: corpo

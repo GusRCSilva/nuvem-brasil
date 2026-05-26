@@ -1,0 +1,21 @@
+feature: exportar_contatos
+priority: P2
+category: email-server/contatos
+description: |
+  O usuário pode fazer backup dos seus contatos
+  exportando-os para um arquivo CSV ou vCard.
+
+given:
+  - description: "Quero fazer backup dos meus contatos"
+
+when:
+  - description: "Acesso 'Configurações > Exportar contatos'"
+  - description: "Seleciono o formato desejado: CSV ou vCard"
+
+then:
+  - description: "Um arquivo contendo todos os meus contatos é baixado"
+  - description: "O arquivo está no formato selecionado e contém todos os campos de cada contato"
+
+invariants:
+  - "Apenas contatos do usuário autenticado são exportados"
+  - "Formatos suportados: CSV e vCard (.vcf)"

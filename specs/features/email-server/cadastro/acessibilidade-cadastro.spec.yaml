@@ -1,0 +1,51 @@
+feature: acessibilidade_cadastro
+priority: P3
+category: email-server/cadastro
+description: |
+  Acessibilidade no formulário de cadastro.
+  O formulário de cadastro deve ser completamente acessível para usuários
+  de leitores de tela e navegável exclusivamente por teclado, seguindo
+  as diretrizes WCAG 2.1 nível AA.
+
+given:
+  - description: "Usuário utiliza leitor de telas"
+    setup:
+      acessibilidade:
+        screen_reader: true
+
+when:
+  - description: "Usuário navega pelo formulário de cadastro usando teclado"
+    action:
+      navegacao: teclado
+      elementos:
+        - campo: nome_completo
+        - campo: username
+        - campo: email_alternativo
+        - campo: senha
+        - checkbox: aceita_termos
+        - botao: btn-criar-conta
+
+then:
+  - description: "Todos os campos possuem labels adequadas associadas via atributo for/id ou aria-labelledby"
+    check:
+      acessibilidade:
+        labels_associadas: todos_os_campos
+  - description: "Mensagens de erro são anunciadas pelo leitor de telas"
+    check:
+      acessibilidade:
+        erros_anunciados: true
+        role: alert
+  - description: "Fluxo de cadastro é completamente navegável por teclado"
+    check:
+      acessibilidade:
+        navegacao_teclado: completa
+        focus_visivel: true
+        tab_order: logico
+
+invariants:
+  - "Todos os elementos interativos possuem role ARIA apropriado"
+  - "Contraste de texto atende razão mínima 4.5:1 (WCAG AA)"
+  - "Nenhuma informação é transmitida exclusivamente por cor"
+
+failure_modes:
+  - "Leitor de telas não compatível com o navegador utilizado"

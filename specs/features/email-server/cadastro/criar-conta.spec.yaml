@@ -1,0 +1,48 @@
+feature: criar_conta
+priority: P0
+category: email-server/cadastro
+description: |
+  Cadastro de nova conta com email e senha.
+  O usuário preenche nome completo, nome de usuário desejado, email alternativo
+  e senha, aceita os termos de uso e clica em "Criar conta".
+  A conta é criada e um email de verificação é enviado para o email alternativo.
+
+given:
+  - description: "Usuário está na página de cadastro"
+    setup:
+      page: /cadastro
+
+when:
+  - description: "Usuário preenche nome completo, nome de usuário, email alternativo e senha"
+    action:
+      fill:
+        nome_completo: "Maria Silva"
+        username: "maria.silva"
+        email_alternativo: "maria@exemplo.com"
+        senha: "Senha@123"
+  - description: "Usuário aceita os termos de uso e clica em Criar conta"
+    action:
+      check: aceita_termos
+      click: btn-criar-conta
+
+then:
+  - description: "Conta é criada com sucesso"
+    check:
+      status_code: 201
+  - description: "Email de verificação é enviado para o email alternativo"
+    check:
+      email_enviado:
+        para: "maria@exemplo.com"
+        tipo: verificacao_conta
+  - description: "Usuário é redirecionado para página de confirmação"
+    check:
+      redirect: /cadastro/confirmacao
+
+invariants:
+  - "Senha nunca é armazenada em texto plano"
+  - "Email de verificação contém token único com expiração"
+  - "Nome de usuário é validado contra padrão alfanumérico permitido"
+
+failure_modes:
+  - "Erro de rede ao tentar criar conta"
+  - "Falha no envio do email de verificação"

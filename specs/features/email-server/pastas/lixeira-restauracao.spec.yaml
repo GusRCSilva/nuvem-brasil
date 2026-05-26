@@ -1,0 +1,49 @@
+feature: lixeira_restauracao
+priority: P0
+category: email-server/pastas
+description: |
+  Emails excluídos são movidos para a Lixeira com um período
+  de retenção de 30 dias antes da exclusão permanente.
+
+given:
+  - description: "Um email foi excluído e está na Lixeira"
+    setup:
+      email_excluido: presente_na_lixeira
+
+when:
+  - description: "Usuário acessa a pasta 'Lixeira'"
+    action:
+      abrir_pasta: "Lixeira"
+
+then:
+  - description: "Email excluído aparece na listagem"
+    check:
+      email_presente:
+        pasta: "Lixeira"
+  - description: "Indicador de dias restantes até exclusão permanente é exibido"
+    check:
+      indicador_dias_restantes:
+        maximo: 30
+  - description: "Botão 'Restaurar' está disponível para o email"
+    check:
+      botao_disponivel: "Restaurar"
+
+when_restaurar:
+  - description: "Clica no botão 'Restaurar'"
+    action:
+      click: botao_restaurar
+
+then_restaurar:
+  - description: "Email é movido de volta para a Caixa de entrada"
+    check:
+      email_presente:
+        pasta: "Caixa de entrada"
+  - description: "Email desaparece da Lixeira"
+    check:
+      email_ausente:
+        pasta: "Lixeira"
+
+invariants:
+  - "Período de retenção é de 30 dias corridos"
+  - "Após 30 dias, email é excluído permanentemente de forma automática"
+  - "Restauração preserva o estado original do email"

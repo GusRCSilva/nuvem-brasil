@@ -1,0 +1,65 @@
+feature: thread_conversa
+priority: P2
+category: email-server/inbox
+description: |
+  Visualização de threads de conversa.
+  Quando uma conversa possui múltiplas respostas (emails com mesmo assunto
+  ou cabeçalho In-Reply-To/References), os emails são agrupados em uma thread.
+  Ao abrir um email da thread, a conversa completa é exibida em ordem
+  cronológica, com cada mensagem expansível/recolhível.
+
+given:
+  - description: "Usuário possui uma thread com múltiplas respostas"
+    setup:
+      service: api
+      auth: bearer_token
+      pre_existing:
+        emails:
+          - id: 1
+            assunto: "Re: Projeto Alpha"
+            thread_id: "thread-001"
+            data: "2026-05-20T10:00:00Z"
+          - id: 2
+            assunto: "Re: Projeto Alpha"
+            thread_id: "thread-001"
+            data: "2026-05-20T11:00:00Z"
+            em_resposta_a: 1
+          - id: 3
+            assunto: "Re: Projeto Alpha"
+            thread_id: "thread-001"
+            data: "2026-05-20T12:00:00Z"
+            em_resposta_a: 1
+
+when:
+  - description: "Usuário abre um email da thread"
+    action:
+      method: GET
+      path: /api/inbox/1
+
+then:
+  - description: "Status HTTP é 200"
+    check:
+      status_code: 200
+  - description: "Resposta contém a thread completa com todas as mensagens"
+    check:
+      json_contains:
+        thread:
+          thread_id: "thread-001"
+          mensagens: []
+  - description: "Mensagens estão em ordem cronológica"
+    check:
+      json_sorted_by: "data"
+      order: asc
+      within: "thread.mensagens"
+  - description: "Cada mensagem possui indicador de expansível/recolhível"
+    check:
+      json_schema:
+        thread:
+          mensagens:
+            - colapsavel: boolean
+              expandida_por_padrao: boolean
+
+invariants:
+  - "A mensagem mais recente da thread é exibida expandida por padrão"
+  - "Demais mensagens são exibidas recolhidas por padrão"
+  - "Threads são identificadas pelo cabeçalho In-Reply-To/References ou agrupamento por assunto similar"

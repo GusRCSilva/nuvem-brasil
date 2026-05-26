@@ -1,0 +1,23 @@
+feature: enviar_email_grupo
+priority: P1
+category: email-server/contatos
+description: |
+  Ao compor um novo email, o usuário pode selecionar
+  um grupo de contatos como destinatário e todos os
+  membros do grupo são adicionados automaticamente.
+
+given:
+  - description: "Tenho um grupo de contatos criado"
+
+when:
+  - description: "Estou compondo um novo email"
+  - description: "Digito o nome do grupo no campo 'Para'"
+  - description: "O grupo aparece como sugestão e eu o seleciono"
+
+then:
+  - description: "Todos os emails dos contatos do grupo são adicionados como destinatários"
+  - description: "Cada destinatário é exibido individualmente no campo 'Para'"
+
+invariants:
+  - "O grupo deve ser resolvido para a lista de emails no momento do envio"
+  - "Contatos sem email no grupo são ignorados na expansão"

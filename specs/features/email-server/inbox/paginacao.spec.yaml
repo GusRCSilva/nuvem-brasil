@@ -1,0 +1,48 @@
+feature: paginacao_inbox
+priority: P1
+category: email-server/inbox
+description: |
+  Paginação da listagem da caixa de entrada.
+  Por padrão, cada página exibe até 50 emails. Quando há mais de 50 emails,
+  controles de navegação (próxima página / página anterior) são exibidos
+  na resposta e no front-end.
+
+given:
+  - description: "Usuário possui mais de 50 emails na caixa de entrada"
+    setup:
+      service: api
+      auth: bearer_token
+      pre_existing:
+        emails: 60
+
+when:
+  - description: "Usuário acessa a primeira página da caixa de entrada"
+    action:
+      method: GET
+      path: /api/inbox
+      query:
+        page: 1
+        per_page: 50
+
+then:
+  - description: "Status HTTP é 200"
+    check:
+      status_code: 200
+  - description: "Resposta contém exatamente 50 emails"
+    check:
+      json_length:
+        emails: 50
+  - description: "Metadados de paginação estão presentes"
+    check:
+      json_contains:
+        paginacao:
+          pagina_atual: 1
+          total_paginas: 2
+          total_emails: 60
+          tem_proxima: true
+          tem_anterior: false
+
+invariants:
+  - "Tamanho de página padrão é 50 quando não especificado"
+  - "Tamanho máximo de página é 100"
+  - "Requisição de página vazia retorna lista vazia, nunca erro"

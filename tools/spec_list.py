@@ -1,4 +1,12 @@
-"""List all specs with green/red status based on test results."""
+"""List all specs with green/red status based on test results.
+
+Spec path convention:
+    specs/features/<project>/<feature>/<scenario>.spec.yaml
+
+Test path convention:
+    apps/<project>/tests/from_specs/test_<feature>_<scenario>.py
+"""
+
 from __future__ import annotations
 
 import glob
@@ -17,10 +25,14 @@ console = Console()
 
 def test_file_for_spec(spec_path: str) -> str | None:
     rel = os.path.relpath(spec_path, "specs/features")
-    dir_part, stem = os.path.split(rel)
-    stem_no_ext = stem.replace(".spec.yaml", "")
-    test_name = f"test_{dir_part.replace(os.sep, '_')}_{stem_no_ext}.py"
-    test_path = os.path.join("tests", "from_specs", test_name)
+    parts = rel.split(os.sep)
+    if len(parts) < 3:
+        return None
+    project = parts[0]
+    feature_dir = os.sep.join(parts[1:-1])
+    stem_no_ext = parts[-1].replace(".spec.yaml", "")
+    test_name = f"test_{feature_dir.replace(os.sep, '_')}_{stem_no_ext}.py"
+    test_path = os.path.join("apps", project, "tests", "from_specs", test_name)
     return test_path if os.path.exists(test_path) else None
 
 

@@ -1,0 +1,44 @@
+feature: recuperacao_senha
+priority: P0
+category: email-server/login
+description: |
+  Fluxo de recuperação de senha.
+  O usuário que esqueceu sua senha pode solicitar um link
+  de redefinição enviado ao email alternativo cadastrado.
+
+given:
+  - description: "Esqueci minha senha"
+    setup:
+      page: /login
+      pre_condition: conta_com_email_alternativo
+
+when:
+  - description: "Clico em \"Esqueci minha senha\""
+    action:
+      type: click
+      target: link_esqueci_senha
+  - description: "Informo meu email"
+    action:
+      type: fill_form
+      fields:
+        email: "usuario@exemplo.com"
+  - description: "Acesso o link de redefinição recebido"
+    action:
+      type: navigate
+      source: email_alternativo
+
+then:
+  - description: "Recebo link de redefinição no email alternativo"
+    check:
+      email_sent_to: email_alternativo
+      email_contains: link_redefinicao
+  - description: "Posso definir nova senha ao acessar o link"
+    check:
+      page_contains: "Definir nova senha"
+      form_fields:
+        - nova_senha
+        - confirmar_senha
+
+invariants:
+  - "Link de redefinição expira em 1 hora"
+  - "Link de redefinição é de uso único"

@@ -1,0 +1,25 @@
+feature: tool_upload_attachment
+priority: P1
+category: email-server/mcp-server
+description: |
+  Agente MCP autenticado pode fazer upload de arquivos binários
+  para anexar em emails. O servidor armazena temporariamente e
+  retorna um attachment_id que pode ser usado na tool send_email.
+
+given:
+  - description: "Agente MCP está autenticado com escopo email:send"
+
+when:
+  - description: "Agente chama upload_attachment com um arquivo binário"
+
+then:
+  - description: "Servidor armazena o arquivo temporariamente"
+  - description: "Servidor retorna attachment_id usável em send_email"
+  - description: "Anexo inclui nome original, tipo MIME e tamanho"
+
+failure_modes:
+  - "Arquivo excede limite de tamanho: retorna erro 413"
+  - "Tipo de arquivo não permitido: retorna erro 415"
+
+invariants:
+  - "Anexos não utilizados em 24h são automaticamente removidos"

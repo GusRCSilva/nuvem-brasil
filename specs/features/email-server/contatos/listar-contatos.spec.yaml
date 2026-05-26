@@ -1,0 +1,21 @@
+feature: listar_contatos
+priority: P0
+category: email-server/contatos
+description: |
+  O usuário autenticado acessa a seção "Contatos" e visualiza
+  a lista completa dos seus contatos em ordem alfabética,
+  com nome, email e avatar (quando disponível).
+
+given:
+  - description: "Estou autenticado no sistema"
+
+when:
+  - description: "Acesso a seção 'Contatos'"
+
+then:
+  - description: "Vejo a lista de todos os meus contatos em ordem alfabética"
+  - description: "Cada item da lista exibe nome, email e avatar se disponível"
+
+invariants:
+  - "A lista sempre pertence exclusivamente ao usuário autenticado"
+  - "Contatos de outros usuários nunca são exibidos"

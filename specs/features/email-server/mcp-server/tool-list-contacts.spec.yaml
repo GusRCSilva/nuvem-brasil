@@ -1,0 +1,22 @@
+feature: tool_list_contacts
+priority: P1
+category: email-server/mcp-server
+description: |
+  Agente MCP autenticado pode listar contatos do usuário usando
+  a tool list_contacts com filtros opcionais de query e grupo.
+
+given:
+  - description: "Agente MCP está autenticado com escopo contacts:read"
+
+when:
+  - description: "Agente chama list_contacts sem parâmetros"
+  - description: "Agente chama list_contacts com parâmetros opcionais de query e grupo"
+
+then:
+  - description: "Retorna lista completa de contatos quando sem filtros"
+  - description: "Retorna contatos filtrados por query (busca textual) quando especificado"
+  - description: "Retorna contatos filtrados por grupo quando especificado"
+  - description: "Cada contato inclui nome, email e grupo"
+
+failure_modes:
+  - "Grupo inexistente: retorna lista vazia"

@@ -1,0 +1,38 @@
+feature: criar_pasta
+priority: P0
+category: email-server/pastas
+description: |
+  O usuário pode criar novas pastas a partir da barra lateral
+  para organizar seus emails de forma personalizada.
+
+given:
+  - description: "Usuário autenticado com a barra lateral de pastas visível"
+    setup:
+      state: autenticado
+      view: barra_lateral_pastas
+
+when:
+  - description: "Clica no botão 'Nova pasta'"
+    action:
+      click: botao_nova_pasta
+  - description: "Digita o nome da nova pasta"
+    action:
+      input:
+        campo: nome_pasta
+        valor: "Minha Pasta"
+  - description: "Confirma a criação"
+    action:
+      click: botao_confirmar
+
+then:
+  - description: "Nova pasta aparece na barra lateral"
+    check:
+      pasta_visivel: "Minha Pasta"
+  - description: "Pasta está vazia"
+    check:
+      pasta_vazia: "Minha Pasta"
+
+invariants:
+  - "Nome da pasta não pode ser vazio"
+  - "Nome da pasta não pode duplicar uma pasta existente no mesmo nível"
+  - "Nome da pasta não pode conter caracteres inválidos (/, \\, :, *, ?, \", <, >, |)"

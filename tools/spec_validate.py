@@ -1,7 +1,13 @@
-"""Validate all spec YAML files against the Pydantic schema."""
+"""Validate all spec YAML files against the Pydantic schema.
+
+Spec path convention:
+    specs/features/<project>/<feature>/<scenario>.spec.yaml
+"""
+
 from __future__ import annotations
 
 import glob
+import os
 import sys
 from pathlib import Path
 
@@ -27,7 +33,9 @@ def validate_all() -> int:
             with open(path) as f:
                 data = yaml.safe_load(f)
             Spec.model_validate(data)
-            console.print(f"[green]✓[/green] {path}")
+            rel = os.path.relpath(path, "specs/features")
+            project = rel.split(os.sep)[0]
+            console.print(f"[green]✓[/green] [{project}] {path}")
         except Exception as e:
             console.print(f"[red]✗[/red] {path}: {e}")
             errors += 1

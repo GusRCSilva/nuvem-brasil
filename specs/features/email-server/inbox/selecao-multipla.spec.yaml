@@ -1,0 +1,56 @@
+feature: selecao_multipla
+priority: P1
+category: email-server/inbox
+description: |
+  Seleção de múltiplos emails para ações em lote.
+  O usuário pode selecionar vários emails via checkboxes e aplicar operações
+  em lote: marcar como lido, marcar como não-lido, arquivar, mover para
+  pasta ou excluir.
+
+given:
+  - description: "Usuário está na caixa de entrada com múltiplos emails"
+    setup:
+      service: api
+      auth: bearer_token
+      pre_existing:
+        emails:
+          - id: 1
+            lido: false
+          - id: 2
+            lido: false
+          - id: 3
+            lido: true
+
+when:
+  - description: "Usuário seleciona emails 1 e 2 e aplica ação 'marcar como lido'"
+    action:
+      method: POST
+      path: /api/inbox/batch
+      body:
+        email_ids: [1, 2]
+        action: "marcar_lido"
+
+then:
+  - description: "Status HTTP é 200"
+    check:
+      status_code: 200
+  - description: "Emails 1 e 2 agora estão marcados como lidos"
+    check:
+      json_contains:
+        resultados:
+          - email_id: 1
+            sucesso: true
+          - email_id: 2
+            sucesso: true
+  - description: "Email 3 permanece inalterado"
+    check:
+      side_effect:
+        email_3_inalterado: true
+
+failure_modes:
+  - "Email na lista não pertence ao usuário: item individual retorna erro, demais são processados"
+  - "Lista de IDs vazia: retorna 400"
+
+invariants:
+  - "Operações em lote são atômicas por email (falha em um não reverte os demais)"
+  - "Ações suportadas: marcar_lido, marcar_nao_lido, arquivar, excluir, mover"

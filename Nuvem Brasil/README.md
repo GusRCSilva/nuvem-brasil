@@ -15,11 +15,30 @@ transparência e confiança pública.
 
 ## Projetos
 
-<!-- Lista de aplicações e serviços será preenchida conforme a iniciativa crescer -->
+- [Email](Email/README.md) — Provedor de email livre, gratuito e soberano com servidor MCP para operação por agentes de IA
 
 ## Como contribuir
 
 <!-- Guia de contribuição -->
+
+### User Stories / Histórias de Usuário
+
+Markdowns neste diretório seguem o formato de **user stories** (histórias de usuário)
+para viabilizar a implementação de testes BDD (Behavior-Driven Development) posteriormente.
+Cada arquivo deve descrever uma funcionalidade no formato:
+
+```markdown
+# Título da Funcionalidade
+
+## História de Usuário
+**Como** [tipo de usuário]
+**Quero** [ação]
+**Para que** [benefício]
+
+## Critérios de Aceitação
+- [ ] Cenário 1: ...
+- [ ] Cenário 2: ...
+```
 
 ## Licença
 

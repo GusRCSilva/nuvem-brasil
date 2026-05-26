@@ -1,0 +1,40 @@
+feature: arrastar_soltar
+priority: P2
+category: email-server/pastas
+description: |
+  O usuário pode mover emails arrastando-os da lista de mensagens
+  e soltando-os sobre uma pasta na barra lateral.
+
+given:
+  - description: "Usuário visualiza a caixa de entrada com emails"
+    setup:
+      view: caixa_entrada
+      emails_presentes: true
+
+when:
+  - description: "Arrasta um email da lista com o mouse"
+    action:
+      drag: elemento_email
+  - description: "Solta o email sobre a pasta 'Projetos' na barra lateral"
+    action:
+      drop: pasta "Projetos"
+
+then:
+  - description: "Email é movido para a pasta 'Projetos'"
+    check:
+      email_presente:
+        pasta: "Projetos"
+        email_id: arrastado
+  - description: "Email desaparece da caixa de entrada"
+    check:
+      email_ausente:
+        pasta: "Caixa de entrada"
+        email_id: arrastado
+  - description: "Feedback visual confirma a operação"
+    check:
+      toast_confirmacao: "Email movido para Projetos"
+
+invariants:
+  - "Arrastar sobre pasta padrão do sistema funciona normalmente"
+  - "Soltar fora de uma pasta alvo cancela a operação"
+  - "Arrastar múltiplos emails de uma vez é suportado"

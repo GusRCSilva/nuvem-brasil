@@ -1,0 +1,23 @@
+feature: tool_move_email
+priority: P1
+category: email-server/mcp-server
+description: |
+  Agente MCP autenticado pode mover um email de uma pasta para outra
+  usando a tool move_email.
+
+given:
+  - description: "Agente MCP está autenticado com escopos email:read e folders:write"
+  - description: "Existe um email com o email_id informado"
+  - description: "Existe uma pasta com o target_folder_id informado"
+
+when:
+  - description: "Agente chama move_email com email_id e target_folder_id"
+
+then:
+  - description: "Email é movido para a pasta destino"
+  - description: "Email não aparece mais na pasta de origem"
+
+failure_modes:
+  - "Email não encontrado: retorna erro 404"
+  - "Pasta destino não encontrada: retorna erro 404"
+  - "Agente sem escopo folders:write: retorna erro 403"

@@ -1,0 +1,24 @@
+feature: importar_contatos
+priority: P2
+category: email-server/contatos
+description: |
+  O usuário pode importar contatos de outro serviço
+  de email enviando um arquivo CSV ou vCard.
+  Contatos duplicados são identificados e o usuário
+  decide como tratá-los.
+
+given:
+  - description: "Tenho contatos em outro serviço de email que desejo migrar"
+
+when:
+  - description: "Acesso 'Configurações > Importar contatos'"
+  - description: "Faço upload de um arquivo no formato CSV ou vCard"
+
+then:
+  - description: "Os contatos do arquivo são importados para minha lista"
+  - description: "Contatos duplicados são identificados e o usuário pode decidir se mantém o existente, substitui ou mantém ambos"
+
+invariants:
+  - "Formatos suportados: CSV e vCard (.vcf)"
+  - "A importação é atômica: se falhar no meio, nenhum contato parcial é salvo"
+  - "O arquivo não pode exceder o limite de tamanho configurado"

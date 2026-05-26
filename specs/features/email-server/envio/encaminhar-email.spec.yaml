@@ -1,0 +1,33 @@
+feature: encaminhar_email
+priority: P0
+category: email-server/envio
+description: |
+  Ao ler um email, o usuário pode clicar em "Encaminhar" para abrir o editor
+  com o assunto prefixado por "Enc:" e o email original citado ou anexado no
+  corpo da mensagem.
+
+given:
+  - description: "Estou lendo um email recebido"
+    setup:
+      page: email-reader
+      email:
+        remetente: fornecedor@exemplo.com
+        assunto: Proposta comercial
+        corpo: Segue em anexo a proposta comercial atualizada.
+
+when:
+  - description: "Clico em 'Encaminhar'"
+    action:
+      type: click
+      target: Encaminhar
+
+then:
+  - description: "O editor de composição abre com 'Para' vazio"
+    check:
+      field_para: ""
+  - description: "Assunto está prefixado com 'Enc:'"
+    check:
+      field_assunto: "Enc: Proposta comercial"
+  - description: "O email original está citado ou anexado no corpo"
+    check:
+      body_contains_original: true

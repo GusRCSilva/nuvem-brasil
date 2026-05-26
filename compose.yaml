@@ -2,9 +2,9 @@ services:
   postgres:
     image: docker.io/library/postgres:16-alpine
     environment:
-      POSTGRES_USER: gusmail
-      POSTGRES_PASSWORD: gusmail
-      POSTGRES_DB: gusmail
+      POSTGRES_USER: email_server
+      POSTGRES_PASSWORD: email_server
+      POSTGRES_DB: email_server
     ports:
       - "5432:5432"
     volumes:

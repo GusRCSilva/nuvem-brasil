@@ -1,0 +1,40 @@
+feature: destinatario_invalido
+priority: P1
+category: email-server/envio
+description: |
+  Ao tentar enviar um email com endereço de destinatário em formato inválido
+  (ausência de @ ou domínio), o sistema deve exibir uma mensagem de erro
+  indicando o formato inválido e impedir o envio.
+
+given:
+  - description: "Estou compondo um email no editor"
+    setup:
+      page: email-compose-editor
+
+when:
+  - description: "Preencho 'Para' com endereço em formato inválido (sem @)"
+    action:
+      field: para
+      value: destinatario-invalido
+  - description: "Preencho o campo 'Assunto'"
+    action:
+      field: assunto
+      value: Teste destinatário inválido
+  - description: "Preencho o campo 'Corpo'"
+    action:
+      field: corpo
+      value: Corpo do email.
+  - description: "Clico em 'Enviar'"
+    action:
+      type: click
+      target: Enviar
+
+then:
+  - description: "Vejo mensagem indicando formato de email inválido"
+    check:
+      notification:
+        type: error
+        text_contains: formato
+  - description: "O email não é enviado"
+    check:
+      status: email_not_sent

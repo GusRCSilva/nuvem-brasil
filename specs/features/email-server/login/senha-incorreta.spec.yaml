@@ -1,0 +1,35 @@
+feature: senha_incorreta
+priority: P1
+category: email-server/login
+description: |
+  Tratamento de tentativa de login com senha incorreta.
+  O sistema deve exibir mensagem genérica sem revelar
+  se o email existe ou não, evitando enumeração de contas.
+
+given:
+  - description: "Estou na página de login"
+    setup:
+      page: /login
+
+when:
+  - description: "Preencho email com senha incorreta"
+    action:
+      type: fill_form
+      fields:
+        email: "usuario@exemplo.com"
+        senha: "senha_errada"
+  - description: "Submeto o formulário de login"
+    action:
+      type: click
+      target: botao_entrar
+
+then:
+  - description: "Vejo mensagem genérica \"Email ou senha inválidos\""
+    check:
+      page_contains: "Email ou senha inválidos"
+  - description: "Permaneço na página de login"
+    check:
+      current_path: /login
+
+failure_modes:
+  - "Após 5 tentativas consecutivas, conta é bloqueada por 15 minutos"

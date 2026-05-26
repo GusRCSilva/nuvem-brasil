@@ -1,0 +1,54 @@
+feature: download_anexos
+priority: P1
+category: email-server/inbox
+description: |
+  Download de anexos de email.
+  O usuário pode baixar anexos individualmente ou todos os anexos de um email
+  compactados em um arquivo ZIP.
+
+given:
+  - description: "Usuário está visualizando um email com múltiplos anexos"
+    setup:
+      service: api
+      auth: bearer_token
+      pre_existing:
+        emails:
+          - id: 1
+            anexos:
+              - id: "att-1"
+                nome: "foto.png"
+              - id: "att-2"
+                nome: "documento.pdf"
+
+when:
+  - description: "Usuário clica em um anexo específico"
+    action:
+      method: GET
+      path: /api/inbox/{email_id}/attachments/{attachment_id}
+  - description: "Usuário solicita download de todos os anexos em ZIP"
+    action:
+      method: GET
+      path: /api/inbox/{email_id}/attachments
+      query:
+        format: zip
+
+then:
+  - description: "Download individual: Status HTTP é 200"
+    check:
+      status_code: 200
+  - description: "Download individual: Resposta contém arquivo binário com Content-Type adequado"
+    check:
+      header:
+        Content-Type: application/octet-stream
+        Content-Disposition: attachment
+  - description: "Download ZIP: Status HTTP é 200"
+    check:
+      status_code: 200
+  - description: "Download ZIP: Arquivo ZIP contém todos os anexos do email"
+    check:
+      header:
+        Content-Type: application/zip
+
+failure_modes:
+  - "Anexo não pertence ao email: retorna 404"
+  - "Email sem anexos: endpoint ZIP retorna 204 No Content"

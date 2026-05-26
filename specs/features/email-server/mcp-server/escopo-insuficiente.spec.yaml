@@ -1,0 +1,26 @@
+feature: escopo_insuficiente
+priority: P1
+category: email-server/mcp-server
+description: |
+  Quando um agente MCP tenta executar uma tool para a qual o token
+  não possui o escopo necessário, o servidor rejeita a operação
+  com erro de permissão, indicando qual escopo é requerido.
+
+given:
+  - description: "Token MCP tem apenas escopo email:read"
+  - description: "Agente MCP está autenticado com este token"
+
+when:
+  - description: "Agente tenta chamar send_email (requer email:send)"
+
+then:
+  - description: "Agente recebe erro de permissão 'Escopo insuficiente: requer email:send'"
+  - description: "Operação não é executada"
+  - description: "Demais tools com escopo email:read continuam funcionando"
+
+failure_modes:
+  - "Escopo inexistente: retorna erro 400 informando escopos válidos"
+
+invariants:
+  - "Cada tool declara explicitamente quais escopos requer"
+  - "Verificação de escopo ocorre antes da execução da tool"

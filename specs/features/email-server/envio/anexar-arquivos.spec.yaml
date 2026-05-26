@@ -1,0 +1,42 @@
+feature: anexar_arquivos
+priority: P0
+category: email-server/envio
+description: |
+  O usuário pode anexar um ou mais arquivos ao email durante a composição.
+  Os anexos são exibidos com nome e tamanho, e podem ser removidos antes do envio.
+
+given:
+  - description: "Estou compondo um email no editor"
+    setup:
+      page: email-compose-editor
+
+when:
+  - description: "Clico no botão 'Anexar'"
+    action:
+      type: click
+      target: Anexar
+  - description: "Seleciono um ou mais arquivos do sistema"
+    action:
+      type: file_select
+      files:
+        - documento.pdf
+        - imagem.png
+
+then:
+  - description: "Os arquivos são anexados ao email"
+    check:
+      attachments:
+        count: 2
+  - description: "Vejo o nome de cada anexo na interface"
+    check:
+      attachment_name_visible:
+        - documento.pdf
+        - imagem.png
+  - description: "Vejo o tamanho de cada anexo na interface"
+    check:
+      attachment_size_visible:
+        - documento.pdf
+        - imagem.png
+  - description: "Posso remover um anexo antes do envio"
+    check:
+      removable: true

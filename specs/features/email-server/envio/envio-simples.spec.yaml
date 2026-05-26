@@ -1,0 +1,44 @@
+feature: envio_simples
+priority: P0
+category: email-server/envio
+description: |
+  O usuário pode enviar um email simples preenchendo os campos obrigatórios
+  (destinatário, assunto e corpo) e clicando em "Enviar". O email é entregue
+  e uma cópia é salva na pasta "Enviados".
+
+given:
+  - description: "Estou no editor de novo email"
+    setup:
+      page: email-compose-editor
+
+when:
+  - description: "Preencho 'Para' com um endereço de email válido"
+    action:
+      field: para
+      value: destinatario@exemplo.com
+  - description: "Preencho o campo 'Assunto'"
+    action:
+      field: assunto
+      value: Assunto do email de teste
+  - description: "Preencho o campo 'Corpo'"
+    action:
+      field: corpo
+      value: Este é o corpo do email de teste.
+  - description: "Clico em 'Enviar'"
+    action:
+      type: click
+      target: Enviar
+
+then:
+  - description: "O email é enviado com sucesso"
+    check:
+      status: email_sent
+  - description: "Vejo uma mensagem de confirmação de envio"
+    check:
+      notification:
+        type: success
+        text_contains: enviado
+  - description: "Uma cópia do email aparece na pasta 'Enviados'"
+    check:
+      folder: Enviados
+      contains_email: true

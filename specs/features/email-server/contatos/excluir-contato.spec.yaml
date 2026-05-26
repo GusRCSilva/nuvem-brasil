@@ -1,0 +1,22 @@
+feature: excluir_contato
+priority: P1
+category: email-server/contatos
+description: |
+  O usuário pode excluir permanentemente um contato
+  da sua lista, mediante confirmação.
+
+given:
+  - description: "Tenho um contato salvo na minha lista"
+
+when:
+  - description: "Seleciono o contato e clico em 'Excluir'"
+  - description: "Confirmo a exclusão na janela de confirmação"
+
+then:
+  - description: "O contato é removido permanentemente da minha lista"
+  - description: "O contato não aparece mais em buscas ou sugestões"
+
+invariants:
+  - "A exclusão é irreversível"
+  - "Apenas o proprietário do contato pode excluí-lo"
+  - "Se o contato pertence a um grupo, é removido também do grupo"

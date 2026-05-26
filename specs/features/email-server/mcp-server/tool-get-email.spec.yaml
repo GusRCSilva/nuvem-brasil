@@ -1,0 +1,22 @@
+feature: tool_get_email
+priority: P0
+category: email-server/mcp-server
+description: |
+  Agente MCP autenticado pode obter o conteúdo completo de um email
+  específico usando a tool get_email, incluindo corpo texto, corpo HTML
+  e anexos como links para download.
+
+given:
+  - description: "Agente MCP está autenticado com escopo email:read"
+  - description: "Existe um email com o email_id solicitado"
+
+when:
+  - description: "Agente chama get_email com email_id"
+
+then:
+  - description: "Servidor retorna email completo: corpo texto, corpo HTML e anexos como links para download"
+  - description: "Anexos incluem nome do arquivo, tipo MIME, tamanho e link de download"
+
+failure_modes:
+  - "Email não encontrado: retorna erro 404"
+  - "Agente sem escopo email:read: retorna erro 403"

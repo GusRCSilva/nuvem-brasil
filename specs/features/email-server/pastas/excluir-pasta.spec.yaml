@@ -1,0 +1,38 @@
+feature: excluir_pasta
+priority: P1
+category: email-server/pastas
+description: |
+  O usuário pode excluir pastas criadas por ele mesmo.
+  Ao excluir, os emails que estavam na pasta retornam para a Caixa de entrada.
+
+given:
+  - description: "Usuário possui uma pasta vazia 'Temporário' criada por ele"
+    setup:
+      pasta_criada_usuario: "Temporário"
+      estado: vazia
+
+when:
+  - description: "Clica com botão direito na pasta 'Temporário'"
+    action:
+      click_direito: pasta "Temporário"
+  - description: "Seleciona a opção 'Excluir'"
+    action:
+      selecionar_menu: "Excluir"
+  - description: "Confirma a exclusão na caixa de diálogo"
+    action:
+      confirmar_dialogo: exclusao
+
+then:
+  - description: "Pasta é removida da barra lateral"
+    check:
+      pasta_ausente: "Temporário"
+  - description: "Emails que estavam na pasta voltam para Caixa de entrada"
+    check:
+      emails_movidos:
+        origem: "Temporário"
+        destino: "Caixa de entrada"
+
+invariants:
+  - "Pastas padrão não podem ser excluídas"
+  - "Exclusão exige confirmação explícita do usuário"
+  - "Se a pasta contiver subpastas, o usuário deve ser avisado"

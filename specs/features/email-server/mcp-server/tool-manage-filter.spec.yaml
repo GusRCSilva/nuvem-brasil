@@ -1,0 +1,23 @@
+feature: tool_manage_filter
+priority: P1
+category: email-server/mcp-server
+description: |
+  Agente MCP autenticado pode gerenciar filtros de email do usuário
+  usando a tool manage_filter com ações de criar, atualizar ou excluir.
+
+given:
+  - description: "Agente MCP está autenticado com escopo folders:write"
+
+when:
+  - description: "Agente chama manage_filter com ação 'create' e definição do filtro (condições e ações)"
+  - description: "Agente chama manage_filter com ação 'update', filter_id e nova definição"
+  - description: "Agente chama manage_filter com ação 'delete' e filter_id"
+
+then:
+  - description: "Filtro é criado e retorna filter_id"
+  - description: "Filtro é atualizado com a nova definição"
+  - description: "Filtro é excluído permanentemente"
+
+failure_modes:
+  - "Filtro não encontrado para update/delete: retorna erro 404"
+  - "Definição de filtro inválida: retorna erro 400 com detalhes da condição inválida"

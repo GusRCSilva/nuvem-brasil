@@ -6,3 +6,7 @@ volumes/
 __pycache__/
 *.egg-info/
 .env
+*.pyc
+dist/
+build/
+.DS_Store

@@ -1,0 +1,23 @@
+feature: adicionar_contato
+priority: P0
+category: email-server/contatos
+description: |
+  O usuário pode adicionar um novo contato manualmente
+  preenchendo nome, email principal, email secundário (opcional),
+  telefone (opcional) e notas (opcionais).
+
+given:
+  - description: "Estou na página de contatos"
+
+when:
+  - description: "Clico em 'Novo contato'"
+  - description: "Preencho nome, email principal, email secundário opcional, telefone opcional, notas opcionais"
+  - description: "Clico em 'Salvar'"
+
+then:
+  - description: "O contato é adicionado à minha lista de contatos"
+  - description: "Os campos obrigatórios (nome e email principal) foram preenchidos e validados"
+
+invariants:
+  - "Email principal é obrigatório e deve ter formato válido"
+  - "Nome é obrigatório"

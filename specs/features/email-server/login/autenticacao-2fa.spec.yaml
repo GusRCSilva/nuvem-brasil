@@ -1,0 +1,39 @@
+feature: autenticacao_2fa
+priority: P1
+category: email-server/login
+description: |
+  Autenticação de dois fatores via código TOTP.
+  Após login com email e senha, o usuário com 2FA ativado
+  deve fornecer um código TOTP válido para acessar a conta.
+
+given:
+  - description: "Ativei 2FA na minha conta"
+    setup:
+      pre_condition: conta_com_2fa_ativado
+
+when:
+  - description: "Faço login com email e senha corretos"
+    action:
+      type: fill_form
+      fields:
+        email: "usuario@exemplo.com"
+        senha: "senha_correta"
+  - description: "Submeto o formulário de login"
+    action:
+      type: click
+      target: botao_entrar
+  - description: "Insiro código TOTP válido"
+    action:
+      type: fill_form
+      fields:
+        codigo_totp: "<codigo_valido>"
+
+then:
+  - description: "Sou solicitado a inserir código TOTP após login"
+    check:
+      page_contains: "Código de verificação"
+      form_fields:
+        - codigo_totp
+  - description: "Acesso caixa de entrada após código válido"
+    check:
+      redirect_path: /inbox

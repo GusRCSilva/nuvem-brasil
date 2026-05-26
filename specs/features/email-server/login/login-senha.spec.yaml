@@ -1,0 +1,33 @@
+feature: login_senha
+priority: P0
+category: email-server/login
+description: |
+  Autenticação do usuário via email e senha.
+  Um usuário com conta ativa informa credenciais válidas
+  e é redirecionado para sua caixa de entrada.
+
+given:
+  - description: "Tenho uma conta ativa"
+    setup:
+      pre_condition: conta_ativa
+
+when:
+  - description: "Preencho email e senha corretos"
+    action:
+      type: fill_form
+      fields:
+        email: "usuario@exemplo.com"
+        senha: "senha_correta"
+  - description: "Clico em \"Entrar\""
+    action:
+      type: click
+      target: botao_entrar
+
+then:
+  - description: "Sou redirecionado para minha caixa de entrada"
+    check:
+      redirect_path: /inbox
+      page_contains: "Caixa de Entrada"
+
+invariants:
+  - "Senhas nunca são logadas ou expostas em respostas"

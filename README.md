@@ -1,65 +1,61 @@
-# Gusmail
+# Nuvem Brasil
 
-Servidor de e-mail desenvolvido sob **Spec-Driven Development (SDD)**: specs YAML são
-a fonte de verdade do sistema. O código é implementado para fazer as specs passarem,
-e os testes são derivados diretamente das specs.
+**Ferramentas digitais livres para a população brasileira.**
 
-## Paradigma
+Monorepo open-source que desenvolve ferramentas digitais acessíveis, de baixo
+custo e centradas no cidadão — priorizando usabilidade, transparência e
+confiança pública.
 
-Toda feature começa como um arquivo YAML em `specs/features/`. O schema Pydantic
-(`specs/schema/spec_schema.py`) valida a estrutura. Testes manuais em
-`tests/from_specs/` traduzem cada cláusula `given/when/then` em assertions pytest.
-O pipeline `just spec-validate → just spec-list → just test` fecha o ciclo.
+## Paradigma: Spec-Driven Development (SDD)
+
+Toda feature é definida primeiro como uma spec YAML em `specs/features/`.
+O schema canônico está em `specs/schema/spec_schema.py`. Testes em
+`apps/<project>/tests/from_specs/` traduzem cada cláusula `given/when/then`
+em assertions pytest. O código existe exclusivamente para fazer os testes
+passarem.
 
 Para entender o paradigma em detalhes, leia [`docs/paradigm.md`](docs/paradigm.md).
-
-## Como rodar localmente
-
-```bash
-# Setup inicial (só precisa rodar uma vez)
-just bootstrap
-
-# Subir dependências (postgres, mailhog, redis)
-just services-up
-
-# Validar specs
-just spec-validate
-just spec-list
-
-# Rodar testes
-just test
-just test-spec health/healthcheck
-
-# Lint e type-check
-just lint
-
-# Rodar servidor de desenvolvimento
-just run
-```
 
 ## Estrutura
 
 ```
-specs/          ← specs YAML (território humano)
-src/gusmail/    ← código da aplicação
-tests/          ← testes (unit, integration, from_specs)
-tools/          ← CLIs auxiliares (validate, list, etc.)
+Nuvem Brasil/      ← visão e documentação de produto
+apps/              ← implementação de cada projeto
+  email-server/    ← provedor de email (FastAPI)
+shared/            ← código comum entre projetos
+specs/             ← specs YAML organizadas por projeto
+tools/             ← CLIs auxiliares (validate, list)
 ```
 
-## Contribuindo como humano
+## Projetos
 
-1. Escreva ou edite uma spec em `specs/features/<categoria>/<nome>.spec.yaml`
+| Projeto | Status | Descrição |
+|---------|--------|-----------|
+| [email-server](apps/email-server/) | em desenvolvimento | Provedor de email livre com servidor MCP nativo |
+
+## Como rodar
+
+```bash
+just bootstrap       # setup inicial
+just services-up     # sobe postgres, mailhog, redis
+just spec-validate   # valida sintaxe das specs
+just spec-list       # status verde/vermelho de cada spec
+just test            # roda todos os testes
+just lint            # lint + type-check
+just run             # servidor de desenvolvimento
+```
+
+## Contribuindo
+
+1. Escreva ou edite uma spec em `specs/features/<project>/<feature>/<scenario>.spec.yaml`
 2. Rode `just spec-validate` para validar o formato
-3. Crie ou atualize o teste correspondente em `tests/from_specs/`
-4. Implemente o código em `src/gusmail/`
+3. Crie ou atualize o teste correspondente em `apps/<project>/tests/from_specs/`
+4. Implemente o código em `apps/<project>/src/`
 5. Rode `just lint && just test`
 6. Abra um PR
 
-## Configurando um agente
-
-Agentes de código devem ler [`AGENTS.md`](AGENTS.md) antes de qualquer interação
-com este repositório. O documento define regras de escopo, fluxo de trabalho e
-territórios proibidos.
+Agentes de código devem ler [`AGENTS.md`](AGENTS.md) antes de qualquer
+interação com este repositório.
 
 ## Licença
 

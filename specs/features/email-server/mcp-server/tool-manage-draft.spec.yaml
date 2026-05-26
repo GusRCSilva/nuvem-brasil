@@ -1,0 +1,23 @@
+feature: tool_manage_draft
+priority: P1
+category: email-server/mcp-server
+description: |
+  Agente MCP autenticado pode gerenciar rascunhos de email usando
+  a tool manage_draft com ações de criar, atualizar ou excluir.
+
+given:
+  - description: "Agente MCP está autenticado com escopo email:drafts"
+
+when:
+  - description: "Agente chama manage_draft com ação 'create' e parâmetros do email"
+  - description: "Agente chama manage_draft com ação 'update', draft_id e novos parâmetros"
+  - description: "Agente chama manage_draft com ação 'delete' e draft_id"
+
+then:
+  - description: "Rascunho é criado e retorna draft_id"
+  - description: "Rascunho é atualizado com os novos parâmetros"
+  - description: "Rascunho é excluído permanentemente"
+
+failure_modes:
+  - "Ação inválida: retorna erro 400 com lista de ações válidas"
+  - "Draft não encontrado para update/delete: retorna erro 404"

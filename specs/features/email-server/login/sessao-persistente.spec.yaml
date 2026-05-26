@@ -1,0 +1,28 @@
+feature: sessao_persistente
+priority: P1
+category: email-server/login
+description: |
+  Sessão persistente via opção "Lembrar-me".
+  O usuário que opta por manter-se autenticado permanece
+  com sessão ativa por até 30 dias, mesmo após fechar o navegador.
+
+given:
+  - description: "Fiz login com opção \"Lembrar-me\""
+    setup:
+      pre_condition: sessao_com_lembrar_me
+
+when:
+  - description: "Fecho e reabro o navegador em até 30 dias"
+    action:
+      type: browser_restart_and_navigate
+      target: /inbox
+
+then:
+  - description: "Permaneço autenticado"
+    check:
+      authenticated: true
+      redirect_path: /inbox
+
+invariants:
+  - "Token de sessão persistente expira em 30 dias"
+  - "Logout explícito invalida o token persistente imediatamente"

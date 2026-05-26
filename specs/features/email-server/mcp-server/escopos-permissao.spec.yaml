@@ -1,0 +1,31 @@
+feature: escopos_permissao
+priority: P0
+category: email-server/mcp-server
+description: |
+  Durante a geração de um token MCP, o usuário pode selecionar
+  granularmente quais permissões o token concederá ao agente.
+  Os escopos disponíveis são predefinidos e nunca excedem as
+  permissões do próprio usuário.
+
+given:
+  - description: "Estou gerando um token MCP"
+
+when:
+  - description: "Seleciono granularmente os escopos de permissão desejados"
+    action:
+      select_scopes:
+        - email:read
+        - email:send
+        - email:drafts
+        - contacts:read
+        - contacts:write
+        - folders:read
+        - folders:write
+
+then:
+  - description: "Cada escopo tem descrição clara do que permite"
+  - description: "Escopos não concedidos resultam em erro de permissão ao usá-los"
+
+invariants:
+  - "Tokens MCP nunca concedem mais permissões que o usuário possui"
+  - "Escopos são avaliados a cada requisição, não apenas na conexão inicial"

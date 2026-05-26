@@ -1,0 +1,50 @@
+feature: confirmacao_envio_multiplos
+priority: P2
+category: email-server/envio
+description: |
+  Ao enviar um email para mais de 10 destinatários, o sistema exibe uma
+  confirmação extra para evitar envios acidentais em massa, informando o
+  número de destinatários e pedindo confirmação explícita.
+
+given:
+  - description: "Estou compondo um email com mais de 10 destinatários"
+    setup:
+      page: email-compose-editor
+      fields:
+        para:
+          - user1@exemplo.com
+          - user2@exemplo.com
+          - user3@exemplo.com
+          - user4@exemplo.com
+          - user5@exemplo.com
+          - user6@exemplo.com
+          - user7@exemplo.com
+          - user8@exemplo.com
+          - user9@exemplo.com
+          - user10@exemplo.com
+          - user11@exemplo.com
+        assunto: Anúncio importante
+        corpo: Conteúdo do anúncio.
+
+when:
+  - description: "Clico em 'Enviar'"
+    action:
+      type: click
+      target: Enviar
+
+then:
+  - description: "Vejo uma mensagem de confirmação com o número de destinatários"
+    check:
+      confirmation_dialog:
+        visible: true
+        text_contains: "11 destinatários"
+  - description: "A mensagem pergunta se desejo continuar"
+    check:
+      confirmation_dialog:
+        text_contains: "Deseja continuar?"
+  - description: "Posso confirmar ou cancelar o envio"
+    check:
+      confirmation_dialog:
+        actions:
+          - confirmar
+          - cancelar

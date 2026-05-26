@@ -1,0 +1,23 @@
+feature: contatos_frequentes
+priority: P2
+category: email-server/contatos
+description: |
+  O sistema identifica os contatos com quem o usuário
+  mais interage e os exibe em uma seção "Frequentes",
+  tanto na página de contatos quanto no campo "Para"
+  do editor de email.
+
+given:
+  - description: "Envio emails com frequência para determinados contatos"
+
+when:
+  - description: "Acesso a página de contatos ou o campo 'Para' no editor de email"
+
+then:
+  - description: "Vejo uma seção 'Frequentes' exibindo os contatos mais usados primeiro"
+  - description: "A ordenação reflete a frequência de interação por email"
+
+invariants:
+  - "A lista de frequentes é calculada com base no histórico de envios do usuário"
+  - "Apenas contatos do usuário autenticado aparecem na seção"
+  - "A seção 'Frequentes' é atualizada periodicamente conforme o uso"

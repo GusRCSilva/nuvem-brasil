@@ -1,0 +1,42 @@
+feature: remover_spam
+priority: P1
+category: email-server/pastas
+description: |
+  O usuário pode reclassificar um email incorretamente marcado
+  como spam, movendo-o de volta à Caixa de entrada e removendo
+  o remetente da lista de bloqueio.
+
+given:
+  - description: "Um email legítimo de 'contato@parceiro.com' foi parar na pasta Spam"
+    setup:
+      email_spam:
+        remetente: "contato@parceiro.com"
+        localizacao: "Spam"
+
+when:
+  - description: "Abre o email na pasta Spam"
+    action:
+      abrir_email: spam
+  - description: "Clica no botão 'Não é spam'"
+    action:
+      click: botao_nao_e_spam
+
+then:
+  - description: "Email é movido para a Caixa de entrada"
+    check:
+      email_presente:
+        pasta: "Caixa de entrada"
+  - description: "Email desaparece da pasta Spam"
+    check:
+      email_ausente:
+        pasta: "Spam"
+  - description: "Remetente é removido da lista de bloqueio"
+    check:
+      remetente_desbloqueado: "contato@parceiro.com"
+  - description: "Emails futuros deste remetente chegarão na Caixa de entrada"
+    check:
+      remetente_nao_bloqueado: "contato@parceiro.com"
+
+invariants:
+  - "Remover da Spam também restaura imagens e links do email"
+  - "Se o remetente foi bloqueado manualmente (não via spam), ele não é desbloqueado"

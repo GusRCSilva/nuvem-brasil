@@ -1,0 +1,24 @@
+feature: tool_manage_contact
+priority: P1
+category: email-server/mcp-server
+description: |
+  Agente MCP autenticado pode gerenciar contatos do usuário usando
+  a tool manage_contact com ações de criar, atualizar ou excluir.
+
+given:
+  - description: "Agente MCP está autenticado com escopo contacts:write"
+
+when:
+  - description: "Agente chama manage_contact com ação 'create' e dados do contato (nome, email, grupo)"
+  - description: "Agente chama manage_contact com ação 'update', contact_id e novos dados"
+  - description: "Agente chama manage_contact com ação 'delete' e contact_id"
+
+then:
+  - description: "Contato é criado e retorna contact_id"
+  - description: "Contato é atualizado com os novos dados"
+  - description: "Contato é excluído permanentemente"
+
+failure_modes:
+  - "Email duplicado no create: retorna erro 409"
+  - "Contato não encontrado para update/delete: retorna erro 404"
+  - "Dados inválidos: retorna erro 400 com detalhes"

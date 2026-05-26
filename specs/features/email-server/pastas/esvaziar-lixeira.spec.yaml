@@ -1,0 +1,36 @@
+feature: esvaziar_lixeira
+priority: P1
+category: email-server/pastas
+description: |
+  O usuário pode esvaziar manualmente a Lixeira, excluindo
+  permanentemente todos os emails nela contidos.
+
+given:
+  - description: "Usuário possui emails na Lixeira"
+    setup:
+      pasta: "Lixeira"
+      emails_presentes: true
+
+when:
+  - description: "Clica no botão 'Esvaziar lixeira'"
+    action:
+      click: botao_esvaziar_lixeira
+  - description: "Confirma a ação na caixa de diálogo"
+    action:
+      confirmar_dialogo: esvaziar_lixeira
+
+then:
+  - description: "Todos os emails da Lixeira são excluídos permanentemente"
+    check:
+      pasta_vazia: "Lixeira"
+  - description: "Emails não podem mais ser recuperados"
+    check:
+      emails_irrecuperaveis: true
+  - description: "Espaço em disco é liberado"
+    check:
+      espaco_liberado: true
+
+invariants:
+  - "Esvaziar lixeira é uma ação irreversível"
+  - "Confirmação explícita é sempre exigida"
+  - "Apenas emails com mais de 30 dias NÃO são excluídos automaticamente sem esvaziamento manual"

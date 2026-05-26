@@ -1,0 +1,30 @@
+feature: bloqueio_inatividade
+priority: P2
+category: email-server/login
+description: |
+  Bloqueio automático de sessão por inatividade.
+  Após 30 minutos sem interação, a sessão é bloqueada
+  e o usuário precisa se reautenticar para continuar.
+
+given:
+  - description: "Estou autenticado"
+    setup:
+      pre_condition: usuario_autenticado
+
+when:
+  - description: "Permaneço inativo por 30 minutos"
+    action:
+      type: wait
+      duration_minutes: 30
+
+then:
+  - description: "Sessão é bloqueada"
+    check:
+      session_locked: true
+  - description: "Preciso reautenticar para continuar"
+    check:
+      redirect_path: /login
+      page_contains: "Sessão expirada por inatividade"
+
+invariants:
+  - "Timeout de inatividade é configurável via política de segurança"

@@ -1,0 +1,22 @@
+feature: adicionar_contato_email
+priority: P1
+category: email-server/contatos
+description: |
+  Ao ler um email cujo remetente não está nos contatos,
+  o usuário pode adicioná-lo rapidamente com os campos
+  de nome e email pré-preenchidos.
+
+given:
+  - description: "Estou lendo um email de um remetente que não está nos meus contatos"
+
+when:
+  - description: "Clico no nome ou email do remetente"
+  - description: "Seleciono 'Adicionar aos contatos'"
+
+then:
+  - description: "Um formulário pré-preenchido com nome e email do remetente é exibido"
+  - description: "Posso complementar os campos opcionais e salvar o contato"
+
+invariants:
+  - "O email do remetente é extraído corretamente do cabeçalho da mensagem"
+  - "Se o remetente já for um contato, a opção não deve aparecer"

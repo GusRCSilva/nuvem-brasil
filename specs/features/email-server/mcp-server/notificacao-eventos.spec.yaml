@@ -1,0 +1,25 @@
+feature: notificacao_eventos
+priority: P2
+category: email-server/mcp-server
+description: |
+  Agentes MCP podem se inscrever em notificações de eventos do
+  servidor de email. Eventos como "novo email recebido" são
+  transmitidos em tempo real via SSE (Server-Sent Events).
+
+given:
+  - description: "Agente MCP está autenticado com token válido"
+
+when:
+  - description: "Agente MCP se inscreve em notificações via SSE"
+
+then:
+  - description: "Eventos como 'novo email recebido' são transmitidos em tempo real"
+  - description: "Cada evento inclui event_type, resumo do email (remetente, assunto) e email_id"
+  - description: "Conexão SSE é mantida ativa com heartbeat periódico"
+
+failure_modes:
+  - "Conexão SSE cai: agente pode reconectar e retomar notificações"
+  - "Token expira durante conexão SSE: conexão é encerrada com evento de erro"
+
+invariants:
+  - "Notificações respeitam os escopos do token"

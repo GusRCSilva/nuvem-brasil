@@ -1,0 +1,24 @@
+feature: limite_taxa
+priority: P1
+category: email-server/mcp-server
+description: |
+  O servidor MCP impõe limite de taxa por token para proteger
+  contra abuso. Quando um token excede o limite, requisições
+  adicionais são rejeitadas temporariamente.
+
+given:
+  - description: "Token MCP está ativo e em uso"
+
+when:
+  - description: "Token MCP excede 100 requisições por minuto"
+
+then:
+  - description: "Requisições adicionais recebem erro 429 rate limited"
+  - description: "Cabeçalho Retry-After informa o tempo de espera em segundos"
+  - description: "Requisições voltam a ser aceitas após o período de espera"
+
+failure_modes:
+  - "Rate limiting é por token, não global"
+
+invariants:
+  - "Limite de taxa não afeta outros tokens do mesmo usuário"

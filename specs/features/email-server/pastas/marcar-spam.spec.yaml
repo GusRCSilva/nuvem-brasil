@@ -1,0 +1,39 @@
+feature: marcar_spam
+priority: P0
+category: email-server/pastas
+description: |
+  O usuário pode marcar emails como spam, movendo-os para a pasta
+  Spam e bloqueando o remetente para mensagens futuras.
+
+given:
+  - description: "Usuário recebeu um email indesejado de spammer@exemplo.com"
+    setup:
+      email_recebido:
+        remetente: "spammer@exemplo.com"
+        localizacao: "Caixa de entrada"
+
+when:
+  - description: "Clica no botão 'Marcar como spam'"
+    action:
+      click: botao_marcar_spam
+
+then:
+  - description: "Email é movido para a pasta Spam"
+    check:
+      email_presente:
+        pasta: "Spam"
+  - description: "Email desaparece da Caixa de entrada"
+    check:
+      email_ausente:
+        pasta: "Caixa de entrada"
+  - description: "Remetente é adicionado à lista de bloqueio"
+    check:
+      remetente_bloqueado: "spammer@exemplo.com"
+  - description: "Contador de não lidos da Spam é atualizado"
+    check:
+      contador_atualizado: "Spam"
+
+invariants:
+  - "Emails na Spam não geram notificações"
+  - "Imagens e links em emails na Spam são bloqueados por padrão"
+  - "Remetentes bloqueados têm todas as mensagens futuras enviadas direto para Spam"

@@ -1,0 +1,45 @@
+feature: conta_gratuita_limites
+priority: P1
+category: email-server/cadastro
+description: |
+  Limites da conta gratuita após o cadastro.
+  Contas gratuitas possuem limites definidos de armazenamento,
+  envio de emails e tamanho de anexos, visíveis nas configurações.
+
+given:
+  - description: "Conta gratuita foi criada e ativada"
+    setup:
+      conta:
+        username: "maria.silva"
+        plano: gratuito
+        status: ativa
+
+when:
+  - description: "Usuário acessa as configurações da conta"
+    action:
+      method: GET
+      path: /configuracoes
+
+then:
+  - description: "Limite de armazenamento é de 5 GB"
+    check:
+      configuracao:
+        armazenamento: "5 GB"
+        armazenamento_bytes: 5368709120
+  - description: "Limite de 200 emails enviados por dia"
+    check:
+      configuracao:
+        emails_por_dia: 200
+  - description: "Tamanho máximo de anexo é 25 MB"
+    check:
+      configuracao:
+        anexo_maximo: "25 MB"
+        anexo_maximo_bytes: 26214400
+
+invariants:
+  - "Limites de conta gratuita são configuráveis via variáveis de ambiente"
+  - "Contadores de uso são resetados diariamente à meia-noite UTC"
+  - "Atingir limite de envio bloqueia novos envios até o reset"
+
+failure_modes:
+  - "Variáveis de ambiente com valores inválidos causam fallback para defaults"

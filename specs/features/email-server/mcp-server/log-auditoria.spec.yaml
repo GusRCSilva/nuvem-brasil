@@ -1,0 +1,26 @@
+feature: log_auditoria
+priority: P1
+category: email-server/mcp-server
+description: |
+  Todas as operações realizadas via MCP são registradas em log de
+  auditoria. O usuário pode consultar o log pela interface web para
+  monitorar a atividade dos tokens.
+
+given:
+  - description: "Ações são realizadas via MCP por agentes autenticados"
+
+when:
+  - description: "Operações MCP são executadas pelos agentes"
+    action:
+      track: all_mcp_operations
+
+then:
+  - description: "Todas as operações são registradas com token_id, tool, timestamp, parâmetros resumidos e resultado"
+  - description: "Log está disponível em 'Configurações > MCP > Log de auditoria'"
+  - description: "Log é ordenado por timestamp decrescente"
+  - description: "Log pode ser filtrado por token_id, tool e período"
+
+invariants:
+  - "Registros de auditoria são imutáveis"
+  - "Log nunca expõe o valor do token, apenas token_id"
+  - "Parâmetros sensíveis nunca são registrados em texto plano"

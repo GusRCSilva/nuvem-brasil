@@ -1,0 +1,45 @@
+feature: excluir_email
+priority: P0
+category: email-server/inbox
+description: |
+  Exclusão de emails da caixa de entrada.
+  Emails excluídos são movidos para a Lixeira (soft delete) e não para
+  exclusão permanente imediata. O usuário pode restaurar emails da Lixeira
+  em até 30 dias. Após 30 dias, emails são excluídos permanentemente.
+
+given:
+  - description: "Usuário possui emails na caixa de entrada"
+    setup:
+      service: api
+      auth: bearer_token
+      pre_existing:
+        emails:
+          - id: 1
+
+when:
+  - description: "Usuário seleciona um email e clica em Excluir"
+    action:
+      method: DELETE
+      path: /api/inbox/{email_id}
+
+then:
+  - description: "Status HTTP é 200"
+    check:
+      status_code: 200
+  - description: "Email é movido para a Lixeira"
+    check:
+      side_effect:
+        email_na_lixeira: true
+  - description: "Email não aparece mais na caixa de entrada"
+    check:
+      side_effect:
+        email_fora_da_inbox: true
+
+failure_modes:
+  - "Email não pertence ao usuário: retorna 404"
+  - "Email já está na lixeira: operação é idempotente, retorna 200"
+
+invariants:
+  - "Exclusão é soft delete (move para lixeira), nunca permanente via este endpoint"
+  - "Emails na lixeira há mais de 30 dias são excluídos permanentemente por job assíncrono"
+  - "Usuário pode excluir múltiplos emails via endpoint de lote"

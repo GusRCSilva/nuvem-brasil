@@ -1,0 +1,30 @@
+feature: codigo_2fa_invalido
+priority: P2
+category: email-server/login
+description: |
+  Tratamento de código TOTP inválido durante autenticação 2FA.
+  O sistema deve oferecer alternativas como novo código
+  ou código de recuperação.
+
+given:
+  - description: "Ativei 2FA"
+    setup:
+      pre_condition: conta_com_2fa_ativado
+
+when:
+  - description: "Insiro código TOTP inválido"
+    action:
+      type: fill_form
+      fields:
+        codigo_totp: "000000"
+
+then:
+  - description: "Vejo mensagem de erro"
+    check:
+      page_contains: "Código inválido"
+  - description: "Posso solicitar novo código"
+    check:
+      element_present: botao_reenviar_codigo
+  - description: "Posso usar código de recuperação"
+    check:
+      element_present: link_usar_codigo_recuperacao

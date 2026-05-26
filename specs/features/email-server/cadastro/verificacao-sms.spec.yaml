@@ -1,0 +1,48 @@
+feature: verificacao_sms
+priority: P1
+category: email-server/cadastro
+description: |
+  Verificação de conta via código SMS.
+  Quando o usuário se cadastra informando número de celular sem email
+  alternativo, a conta fica pendente de verificação. O usuário insere
+  o código recebido por SMS para ativar a conta.
+
+given:
+  - description: "Conta foi criada informando número de celular sem email alternativo"
+    setup:
+      conta:
+        username: "joao.silva"
+        celular: "+5511999999999"
+        email_alternativo: null
+        status: pendente_verificacao
+  - description: "Código SMS de 6 dígitos foi enviado para o celular"
+    setup:
+      codigo_sms: "123456"
+
+when:
+  - description: "Usuário insere o código recebido por SMS"
+    action:
+      fill:
+        codigo_verificacao: "123456"
+      click: btn-verificar
+
+then:
+  - description: "Conta é ativada com sucesso"
+    check:
+      conta:
+        status: ativa
+  - description: "Usuário é redirecionado para página de boas-vindas"
+    check:
+      redirect: /bem-vindo
+
+invariants:
+  - "Código SMS tem expiração (padrão 10 minutos)"
+  - "Código SMS é de uso único"
+  - "Máximo de 3 tentativas de verificação por código"
+  - "Número de celular é validado no formato E.164"
+
+failure_modes:
+  - "Código expirado"
+  - "Código inválido"
+  - "Falha no envio do SMS"
+  - "Número de celular em formato inválido"

@@ -1,0 +1,25 @@
+feature: criar_grupo
+priority: P1
+category: email-server/contatos
+description: |
+  O usuário pode organizar seus contatos em grupos
+  nomeados, facilitando o envio de emails para
+  múltiplos destinatários de uma vez.
+
+given:
+  - description: "Estou na página de contatos"
+
+when:
+  - description: "Clico em 'Novo grupo'"
+  - description: "Nomeio o grupo"
+  - description: "Adiciono contatos da minha lista ao grupo"
+  - description: "Clico em 'Salvar'"
+
+then:
+  - description: "O grupo é criado e aparece na barra lateral de contatos"
+  - description: "Os contatos selecionados passam a pertencer ao grupo"
+
+invariants:
+  - "Um contato pode pertencer a múltiplos grupos"
+  - "O nome do grupo é obrigatório"
+  - "Grupos são privados, visíveis apenas ao usuário que os criou"

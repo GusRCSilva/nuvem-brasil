@@ -1,0 +1,42 @@
+feature: marcar_nao_lido
+priority: P1
+category: email-server/inbox
+description: |
+  Alternância do estado de leitura de um email.
+  Um email marcado como lido pode ser revertido para o estado de não-lido.
+  A mudança é refletida imediatamente na listagem da caixa de entrada.
+
+given:
+  - description: "Usuário possui um email marcado como lido"
+    setup:
+      service: api
+      auth: bearer_token
+      pre_existing:
+        emails:
+          - id: 1
+            lido: true
+
+when:
+  - description: "Usuário solicita marcar o email como não-lido"
+    action:
+      method: PATCH
+      path: /api/inbox/{email_id}/read-status
+      body:
+        lido: false
+
+then:
+  - description: "Status HTTP é 200"
+    check:
+      status_code: 200
+  - description: "Email agora está marcado como não-lido"
+    check:
+      json_contains:
+        lido: false
+  - description: "Ao listar a caixa de entrada, o email aparece como não-lido"
+    check:
+      side_effect:
+        listagem_mostra_nao_lido: true
+
+failure_modes:
+  - "Email não pertence ao usuário: retorna 404"
+  - "Email já está como não-lido: operação é idempotente, retorna 200"

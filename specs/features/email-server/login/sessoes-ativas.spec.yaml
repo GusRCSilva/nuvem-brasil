@@ -1,0 +1,31 @@
+feature: sessoes_ativas
+priority: P2
+category: email-server/login
+description: |
+  Gerenciamento de sessões ativas.
+  O usuário pode visualizar todos os dispositivos e locais
+  com sessão ativa e encerrar sessões individuais remotamente.
+
+given:
+  - description: "Estou autenticado"
+    setup:
+      pre_condition: usuario_autenticado
+
+when:
+  - description: "Acesso \"Configurações > Sessões ativas\""
+    action:
+      type: navigate
+      path: /configuracoes/sessoes-ativas
+
+then:
+  - description: "Vejo lista de dispositivos e locais com sessão ativa"
+    check:
+      page_contains: "Sessões ativas"
+      list_contains:
+        - dispositivo
+        - localizacao
+        - data_hora
+  - description: "Posso encerrar sessões individuais remotamente"
+    check:
+      element_present: botao_encerrar_sessao
+      action_available: revoke_session

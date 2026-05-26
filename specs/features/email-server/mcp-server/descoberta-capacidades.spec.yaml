@@ -1,0 +1,21 @@
+feature: descoberta_capacidades
+priority: P0
+category: email-server/mcp-server
+description: |
+  Quando um cliente MCP se conecta ao servidor, ele pode descobrir
+  quais tools estão disponíveis chamando list_tools. O servidor
+  retorna apenas as tools correspondentes aos escopos do token.
+
+given:
+  - description: "Cliente MCP está conectado com um token que possui escopos específicos"
+
+when:
+  - description: "Cliente MCP chama list_tools"
+
+then:
+  - description: "Servidor retorna apenas tools correspondentes aos escopos do token"
+  - description: "Cada tool inclui nome, descrição e schema JSON dos parâmetros"
+  - description: "Tools não cobertas pelos escopos do token são omitidas da resposta"
+
+invariants:
+  - "list_tools nunca expõe tools que o token não tem permissão para usar"

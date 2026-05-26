@@ -1,0 +1,40 @@
+feature: pastas_padrao
+priority: P0
+category: email-server/pastas
+description: |
+  Ao criar uma nova conta de email, o sistema deve provisionar
+  automaticamente um conjunto de pastas padrão para organização
+  inicial das mensagens.
+
+given:
+  - description: "Conta de email recém-criada"
+    setup:
+      action: criar_conta
+
+when:
+  - description: "Nenhuma ação do usuário é necessária"
+
+then:
+  - description: "Pasta 'Caixa de entrada' existe"
+    check:
+      pasta_existe: "Caixa de entrada"
+  - description: "Pasta 'Enviados' existe"
+    check:
+      pasta_existe: "Enviados"
+  - description: "Pasta 'Rascunhos' existe"
+    check:
+      pasta_existe: "Rascunhos"
+  - description: "Pasta 'Arquivo' existe"
+    check:
+      pasta_existe: "Arquivo"
+  - description: "Pasta 'Lixeira' existe"
+    check:
+      pasta_existe: "Lixeira"
+  - description: "Pasta 'Spam' existe"
+    check:
+      pasta_existe: "Spam"
+
+invariants:
+  - "Pastas padrão não podem ser renomeadas"
+  - "Pastas padrão não podem ser excluídas"
+  - "Pastas padrão são criadas no momento da criação da conta"

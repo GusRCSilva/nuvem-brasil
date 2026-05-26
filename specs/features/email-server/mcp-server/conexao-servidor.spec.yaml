@@ -1,0 +1,23 @@
+feature: conexao_servidor
+priority: P0
+category: email-server/mcp-server
+description: |
+  Um agente MCP externo se conecta ao servidor usando um token
+  válido. O servidor autentica a conexão, expõe as tools disponíveis
+  conforme os escopos do token e registra a conexão no log de auditoria.
+
+given:
+  - description: "Um agente MCP tenta se conectar com um token válido"
+
+when:
+  - description: "Agente estabelece conexão com o servidor MCP"
+    action:
+      method: mcp_connect
+
+then:
+  - description: "Servidor responde com lista de tools disponíveis conforme escopos do token"
+  - description: "Conexão é registrada no log de auditoria com token_id, timestamp e IP de origem"
+  - description: "Cada tool listada inclui nome, descrição e schema JSON dos parâmetros"
+
+invariants:
+  - "Conexões sem token ou com token inválido são rejeitadas com erro 401"

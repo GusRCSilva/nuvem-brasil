@@ -1,0 +1,54 @@
+feature: multiplos_destinatarios
+priority: P0
+category: email-server/envio
+description: |
+  O usuário pode adicionar múltiplos destinatários nos campos Para, CC e CCo
+  e, ao enviar, o email é entregue a todos os destinatários listados.
+
+given:
+  - description: "Estou compondo um email no editor"
+    setup:
+      page: email-compose-editor
+
+when:
+  - description: "Adiciono o destinatário principal em 'Para'"
+    action:
+      field: para
+      value: principal@exemplo.com
+  - description: "Adiciono destinatário em 'CC'"
+    action:
+      field: cc
+      value: copia@exemplo.com
+  - description: "Adiciono destinatário em 'CCo'"
+    action:
+      field: cco
+      value: oculto@exemplo.com
+  - description: "Preencho assunto e corpo"
+    action:
+      field: assunto
+      value: Email para múltiplos destinatários
+  - description: "Preencho o corpo"
+    action:
+      field: corpo
+      value: Conteúdo do email.
+  - description: "Clico em 'Enviar'"
+    action:
+      type: click
+      target: Enviar
+
+then:
+  - description: "O email é enviado para o destinatário principal"
+    check:
+      recipient: principal@exemplo.com
+      status: delivered
+  - description: "O email é enviado para o destinatário em CC"
+    check:
+      recipient: copia@exemplo.com
+      status: delivered
+  - description: "O email é enviado para o destinatário em CCo"
+    check:
+      recipient: oculto@exemplo.com
+      status: delivered
+  - description: "O campo CCo não é visível para os outros destinatários"
+    check:
+      bcc_hidden: true

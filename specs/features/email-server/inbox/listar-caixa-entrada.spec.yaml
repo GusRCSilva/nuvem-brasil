@@ -1,0 +1,46 @@
+feature: listar_caixa_entrada
+priority: P0
+category: email-server/inbox
+description: |
+  Listagem da caixa de entrada do usuário autenticado.
+  Os emails são exibidos em ordem cronológica inversa (mais recentes primeiro).
+  Cada item da lista exibe remetente, assunto, trecho do corpo, data/hora e
+  indicador visual de estado lido/não-lido.
+
+given:
+  - description: "Usuário está autenticado no sistema"
+    setup:
+      service: api
+      auth: bearer_token
+
+when:
+  - description: "Usuário acessa o endpoint da caixa de entrada"
+    action:
+      method: GET
+      path: /api/inbox
+
+then:
+  - description: "Status HTTP é 200"
+    check:
+      status_code: 200
+  - description: "Resposta contém lista de emails"
+    check:
+      json_contains:
+        emails: []
+  - description: "Emails estão ordenados do mais recente para o mais antigo"
+    check:
+      json_sorted_by: "data_recebimento"
+      order: desc
+  - description: "Cada email possui remetente, assunto, trecho do corpo, data/hora e indicador de lido/não-lido"
+    check:
+      json_schema:
+        emails:
+          - remetente: string
+            assunto: string
+            trecho_corpo: string
+            data_hora: datetime
+            lido: boolean
+
+invariants:
+  - "Listagem nunca retorna emails de outros usuários"
+  - "Emails na lixeira não aparecem na caixa de entrada"

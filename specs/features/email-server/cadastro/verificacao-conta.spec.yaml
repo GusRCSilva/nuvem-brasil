@@ -1,0 +1,49 @@
+feature: verificacao_conta
+priority: P0
+category: email-server/cadastro
+description: |
+  Verificação de conta via link enviado por email.
+  Após o cadastro, a conta fica pendente de verificação.
+  O usuário acessa o link de verificação enviado para o email alternativo
+  e a conta é ativada, permitindo o uso do serviço de email.
+
+given:
+  - description: "Conta foi criada com email alternativo"
+    setup:
+      conta:
+        username: "maria.silva"
+        email_alternativo: "maria@exemplo.com"
+        status: pendente_verificacao
+  - description: "Email de verificação foi enviado com token válido"
+    setup:
+      token_verificacao: "<token_valido>"
+
+when:
+  - description: "Usuário acessa o link de verificação enviado por email"
+    action:
+      method: GET
+      path: /verificar-conta
+      params:
+        token: "<token_valido>"
+
+then:
+  - description: "Conta é ativada com sucesso"
+    check:
+      conta:
+        status: ativa
+  - description: "Usuário é redirecionado para página de boas-vindas"
+    check:
+      redirect: /bem-vindo
+  - description: "Usuário pode começar a usar o serviço de email"
+    check:
+      acesso_email: permitido
+
+invariants:
+  - "Token de verificação tem expiração (padrão 24h)"
+  - "Token de verificação é de uso único"
+  - "Link de verificação usa HTTPS"
+
+failure_modes:
+  - "Token expirado"
+  - "Token inválido ou já utilizado"
+  - "Conta não encontrada para o token"

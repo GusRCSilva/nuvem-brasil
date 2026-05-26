@@ -1,0 +1,59 @@
+feature: indicacao_anexos
+priority: P1
+category: email-server/inbox
+description: |
+  Indicação visual de anexos na listagem e no detalhe do email.
+  Na listagem, emails com anexos exibem um ícone de clipe ao lado do assunto.
+  Ao abrir o email, o usuário vê a lista completa de anexos com nome do
+  arquivo e tamanho.
+
+given:
+  - description: "Usuário possui emails com e sem anexos na caixa de entrada"
+    setup:
+      service: api
+      auth: bearer_token
+      pre_existing:
+        emails:
+          - id: 1
+            assunto: "Relatório"
+            tem_anexos: true
+            anexos:
+              - nome: "relatorio.pdf"
+                tamanho_bytes: 204800
+          - id: 2
+            assunto: "Lembrete"
+            tem_anexos: false
+  - description: "Usuário abre o email com anexos"
+    setup:
+      service: api
+      auth: bearer_token
+
+when:
+  - description: "Usuário visualiza a listagem da caixa de entrada"
+    action:
+      method: GET
+      path: /api/inbox
+  - description: "Usuário acessa o detalhe do email"
+    action:
+      method: GET
+      path: /api/inbox/1
+
+then:
+  - description: "Email com anexo exibe indicador de anexo na listagem"
+    check:
+      json_contains:
+        emails:
+          - id: 1
+            tem_anexos: true
+  - description: "Email sem anexo não exibe indicador"
+    check:
+      json_contains:
+        emails:
+          - id: 2
+            tem_anexos: false
+  - description: "Lista de anexos contém nome e tamanho de cada arquivo"
+    check:
+      json_contains:
+        anexos:
+          - nome: "relatorio.pdf"
+            tamanho_bytes: 204800

@@ -1,0 +1,36 @@
+feature: senha_fraca
+priority: P1
+category: email-server/cadastro
+description: |
+  Validação de força da senha durante o cadastro.
+  Senhas que não atendem aos requisitos mínimos são rejeitadas
+  com mensagem orientativa sobre os critérios exigidos.
+
+given:
+  - description: "Usuário está na página de cadastro"
+    setup:
+      page: /cadastro
+
+when:
+  - description: "Usuário preenche senha com menos de 8 caracteres"
+    action:
+      fill:
+        senha: "abc123"
+
+then:
+  - description: "Mensagem orientando requisitos mínimos de senha é exibida"
+    check:
+      mensagem_contem: "A senha deve ter no mínimo 8 caracteres"
+  - description: "Botão de criar conta permanece desabilitado"
+    check:
+      elemento:
+        seletor: btn-criar-conta
+        estado: disabled
+
+invariants:
+  - "Senhas nunca são armazenadas em texto plano"
+  - "Validação de senha ocorre no cliente e no servidor"
+  - "Política de senha é configurável via variáveis de ambiente"
+
+failure_modes:
+  - "Bypass de validação client-side via ferramentas de desenvolvedor"

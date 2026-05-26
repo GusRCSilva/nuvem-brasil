@@ -1,4 +1,5 @@
 """Generate pytest files from spec YAML files (stub)."""
+
 from __future__ import annotations
 
 import sys

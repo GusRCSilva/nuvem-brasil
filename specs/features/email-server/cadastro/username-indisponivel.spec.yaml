@@ -1,0 +1,42 @@
+feature: username_indisponivel
+priority: P1
+category: email-server/cadastro
+description: |
+  Validação de nome de usuário já existente durante o cadastro.
+  Quando o nome de usuário desejado já está em uso, o sistema exibe
+  mensagem de erro e sugere alternativas disponíveis.
+
+given:
+  - description: "Usuário está na página de cadastro"
+    setup:
+      page: /cadastro
+  - description: "Nome de usuário 'maria.silva' já existe no sistema"
+    setup:
+      usuarios_existentes:
+        - username: maria.silva
+
+when:
+  - description: "Usuário preenche o campo de nome de usuário com 'maria.silva'"
+    action:
+      fill:
+        username: maria.silva
+  - description: "Usuário sai do campo (evento blur)"
+    action:
+      event: blur
+      field: username
+
+then:
+  - description: "Mensagem 'nome já está em uso' é exibida"
+    check:
+      mensagem_contem: "nome já está em uso"
+  - description: "Sugestões de nomes de usuário disponíveis são exibidas"
+    check:
+      sugestoes_min: 3
+      formato_sugestao: "maria.silva{N}"
+
+invariants:
+  - "Verificação de disponibilidade é case-insensitive"
+  - "Sugestões nunca expõem dados de outros usuários"
+
+failure_modes:
+  - "Timeout na consulta de disponibilidade de username"

@@ -1,0 +1,63 @@
+feature: visualizacao_anexos
+priority: P2
+category: email-server/inbox
+description: |
+  Pré-visualização inline de anexos de imagem e PDF no corpo do email.
+  Ao abrir um email, anexos que são imagens (PNG, JPEG, GIF, WebP) ou PDFs
+  são renderizados como pré-visualização inline no corpo do email, sem
+  necessidade de download.
+
+given:
+  - description: "Usuário recebeu um email com anexo de imagem"
+    setup:
+      service: api
+      auth: bearer_token
+      pre_existing:
+        emails:
+          - id: 1
+            anexos:
+              - id: "att-1"
+                nome: "foto.png"
+                mime_type: "image/png"
+                inline_url: "/api/inbox/1/attachments/att-1/preview"
+  - description: "Usuário está visualizando um email com anexo PDF"
+    setup:
+      service: api
+      auth: bearer_token
+      pre_existing:
+        emails:
+          - id: 2
+            anexos:
+              - id: "att-2"
+                nome: "contrato.pdf"
+                mime_type: "application/pdf"
+
+when:
+  - description: "Usuário abre o email com imagem"
+    action:
+      method: GET
+      path: /api/inbox/1
+  - description: "Usuário abre o email com PDF"
+    action:
+      method: GET
+      path: /api/inbox/2
+
+then:
+  - description: "Anexo de imagem possui URL de pré-visualização inline"
+    check:
+      json_contains:
+        anexos:
+          - nome: "foto.png"
+            preview_disponivel: true
+            inline_url: string
+  - description: "Anexo PDF possui URL de pré-visualização inline"
+    check:
+      json_contains:
+        anexos:
+          - nome: "contrato.pdf"
+            preview_disponivel: true
+
+invariants:
+  - "Pré-visualização está disponível apenas para imagens (PNG, JPEG, GIF, WebP) e PDFs"
+  - "Demais tipos de arquivo não possuem preview_disponivel"
+  - "URL de preview requer autenticação para acesso"

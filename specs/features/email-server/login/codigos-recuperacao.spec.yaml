@@ -1,0 +1,35 @@
+feature: codigos_recuperacao
+priority: P2
+category: email-server/login
+description: |
+  Uso de códigos de recuperação para contornar a ausência
+  do dispositivo 2FA. O usuário pode acessar sua conta
+  com um código de recuperação pré-gerado.
+
+given:
+  - description: "Ativei 2FA"
+    setup:
+      pre_condition: conta_com_2fa_ativado
+  - description: "Não tenho dispositivo 2FA disponível"
+    setup:
+      pre_condition: sem_dispositivo_2fa
+
+when:
+  - description: "Uso código de recuperação válido"
+    action:
+      type: fill_form
+      fields:
+        codigo_recuperacao: "<codigo_valido>"
+
+then:
+  - description: "Acesso minha conta"
+    check:
+      redirect_path: /inbox
+  - description: "Sou orientado a gerar novos códigos de recuperação"
+    check:
+      page_contains: "Gerar novos códigos de recuperação"
+      element_present: botao_gerar_codigos
+
+invariants:
+  - "Cada código de recuperação é de uso único"
+  - "Códigos de recuperação são gerados em lotes de 10"

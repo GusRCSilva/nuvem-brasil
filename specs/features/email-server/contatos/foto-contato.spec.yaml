@@ -1,0 +1,22 @@
+feature: foto_contato
+priority: P2
+category: email-server/contatos
+description: |
+  O usuário pode associar uma foto a um contato,
+  que será exibida como avatar na lista de contatos
+  e no editor de email.
+
+given:
+  - description: "Estou visualizando um contato"
+
+when:
+  - description: "Faço upload de uma foto para o contato"
+
+then:
+  - description: "A foto é exibida como avatar do contato na lista de contatos"
+  - description: "A foto é exibida no editor de email ao selecionar o contato como destinatário"
+
+invariants:
+  - "Formatos de imagem suportados: JPEG, PNG, WebP"
+  - "A imagem é redimensionada para dimensões padrão de avatar"
+  - "O arquivo não pode exceder o limite de tamanho configurado"

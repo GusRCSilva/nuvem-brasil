@@ -1,0 +1,35 @@
+feature: gerar_token
+priority: P0
+category: email-server/mcp-server
+description: |
+  Usuário autenticado pode gerar um token MCP para acesso por agentes,
+  definindo escopos de permissão, nome e validade.
+  O token é exibido uma única vez e registrado na lista de tokens ativos.
+
+given:
+  - description: "Estou autenticado no servidor de email"
+
+when:
+  - description: "Acesso 'Configurações > MCP > Gerar token'"
+    action:
+      navigate: /config/mcp/tokens/new
+  - description: "Seleciono escopos de permissão desejados"
+    action:
+      select_scopes:
+        - email:read
+  - description: "Defino nome e validade do token"
+    action:
+      fill:
+        nome: "Meu Agente"
+        validade_dias: 90
+  - description: "Confirmo a geração"
+    action:
+      click: generate_token
+
+then:
+  - description: "Token MCP é gerado e exibido uma única vez"
+  - description: "Token aparece na lista de tokens ativos com nome, escopos e data de expiração"
+
+invariants:
+  - "Token nunca é armazenado em texto plano após a primeira exibição"
+  - "Apenas o hash do token é persistido"

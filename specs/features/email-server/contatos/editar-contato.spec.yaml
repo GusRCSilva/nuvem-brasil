@@ -1,0 +1,23 @@
+feature: editar_contato
+priority: P1
+category: email-server/contatos
+description: |
+  O usuário pode editar as informações de um contato
+  existente, alterando qualquer campo e salvando as
+  modificações.
+
+given:
+  - description: "Tenho um contato salvo na minha lista"
+
+when:
+  - description: "Clico no contato e seleciono 'Editar'"
+  - description: "Altero os campos desejados"
+  - description: "Clico em 'Salvar'"
+
+then:
+  - description: "As informações do contato são atualizadas"
+  - description: "As alterações são refletidas imediatamente na lista de contatos"
+
+invariants:
+  - "Apenas o proprietário do contato pode editá-lo"
+  - "Nome e email principal permanecem obrigatórios após edição"

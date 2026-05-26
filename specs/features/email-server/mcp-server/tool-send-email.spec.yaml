@@ -1,0 +1,22 @@
+feature: tool_send_email
+priority: P0
+category: email-server/mcp-server
+description: |
+  Agente MCP autenticado pode enviar emails usando a tool send_email
+  com destinatários, assunto, corpo e anexos opcionais.
+
+given:
+  - description: "Agente MCP está autenticado com escopo email:send"
+
+when:
+  - description: "Agente chama send_email com to, cc, bcc, subject, body e attachments opcionais"
+
+then:
+  - description: "Email é enviado com sucesso"
+  - description: "Servidor retorna email_id e status de confirmação"
+  - description: "Email aparece na pasta 'Enviados' do usuário"
+
+failure_modes:
+  - "Destinatário inválido: retorna erro 400 com detalhes"
+  - "Agente sem escopo email:send: retorna erro 403"
+  - "Falha no envio SMTP: retorna erro 502 com mensagem descritiva"

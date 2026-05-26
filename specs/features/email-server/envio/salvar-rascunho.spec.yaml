@@ -1,0 +1,39 @@
+feature: salvar_rascunho
+priority: P0
+category: email-server/envio
+description: |
+  Durante a composição, o usuário pode salvar o email como rascunho manualmente
+  ou via salvamento automático. O rascunho fica disponível na pasta "Rascunhos"
+  para ser retomado posteriormente.
+
+given:
+  - description: "Estou compondo um email no editor"
+    setup:
+      page: email-compose-editor
+  - description: "Preenchi os campos Para, Assunto e Corpo"
+    setup:
+      fields:
+        para: destinatario@exemplo.com
+        assunto: Rascunho de teste
+        corpo: Conteúdo parcial do email.
+
+when:
+  - description: "Clico em 'Salvar rascunho' (ou ocorre salvamento automático)"
+    action:
+      type: click
+      target: Salvar rascunho
+
+then:
+  - description: "O email é salvo na pasta 'Rascunhos'"
+    check:
+      folder: Rascunhos
+      contains_email: true
+  - description: "O rascunho preserva todos os campos preenchidos"
+    check:
+      draft_fields_preserved:
+        para: destinatario@exemplo.com
+        assunto: Rascunho de teste
+        corpo: Conteúdo parcial do email.
+  - description: "Posso retomar o rascunho posteriormente"
+    check:
+      draft_retrievable: true

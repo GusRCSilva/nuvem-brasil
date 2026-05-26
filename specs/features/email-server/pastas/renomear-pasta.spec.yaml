@@ -1,0 +1,39 @@
+feature: renomear_pasta
+priority: P1
+category: email-server/pastas
+description: |
+  O usuário pode renomear pastas criadas por ele mesmo.
+  Pastas padrão do sistema não podem ser renomeadas.
+
+given:
+  - description: "Usuário possui uma pasta 'Financeiro' criada por ele"
+    setup:
+      pasta_criada_usuario: "Financeiro"
+
+when:
+  - description: "Clica com botão direito na pasta 'Financeiro'"
+    action:
+      click_direito: pasta "Financeiro"
+  - description: "Seleciona a opção 'Renomear'"
+    action:
+      selecionar_menu: "Renomear"
+  - description: "Digita novo nome 'Contabilidade' e confirma"
+    action:
+      input:
+        campo: renomear_pasta
+        valor: "Contabilidade"
+
+then:
+  - description: "Pasta agora exibe o novo nome na barra lateral"
+    check:
+      pasta_visivel: "Contabilidade"
+  - description: "Nome antigo não aparece mais"
+    check:
+      pasta_ausente: "Financeiro"
+  - description: "Emails dentro da pasta permanecem intactos"
+    check:
+      emails_preservados: "Contabilidade"
+
+invariants:
+  - "Pastas padrão (Caixa de entrada, Enviados, Rascunhos, Arquivo, Lixeira, Spam) não podem ser renomeadas"
+  - "Novo nome segue as mesmas regras de validação da criação"

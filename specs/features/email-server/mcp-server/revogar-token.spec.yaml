@@ -1,0 +1,25 @@
+feature: revogar_token
+priority: P0
+category: email-server/mcp-server
+description: |
+  Usuário pode revogar um token MCP ativo, invalidando-o imediatamente
+  e impedindo qualquer uso futuro por agentes.
+
+given:
+  - description: "Tenho tokens MCP ativos registrados"
+
+when:
+  - description: "Clico em 'Revogar' ao lado de um token"
+    action:
+      click: revoke_button
+  - description: "Confirmo a ação de revogação"
+    action:
+      click: confirm_revoke
+
+then:
+  - description: "Token é imediatamente invalidado"
+  - description: "Token desaparece da lista de tokens ativos ou é marcado como revogado"
+  - description: "Qualquer conexão usando o token revogado é encerrada"
+
+failure_modes:
+  - "Token já revogado: operação é idempotente, retorna sucesso"

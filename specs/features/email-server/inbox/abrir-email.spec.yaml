@@ -1,0 +1,43 @@
+feature: abrir_email
+priority: P0
+category: email-server/inbox
+description: |
+  Visualização completa de um email individual.
+  Ao abrir um email, o usuário vê todos os detalhes: remetente, destinatários
+  (To, Cc), assunto, corpo completo e lista de anexos.
+  O email é automaticamente marcado como lido ao ser aberto.
+
+given:
+  - description: "Usuário está autenticado e possui emails na caixa de entrada"
+    setup:
+      service: api
+      auth: bearer_token
+      pre_existing:
+        emails: 1
+
+when:
+  - description: "Usuário abre um email específico pelo ID"
+    action:
+      method: GET
+      path: /api/inbox/{email_id}
+
+then:
+  - description: "Status HTTP é 200"
+    check:
+      status_code: 200
+  - description: "Resposta contém remetente, destinatários, assunto, corpo e anexos"
+    check:
+      json_contains:
+        remetente: string
+        destinatarios: []
+        assunto: string
+        corpo: string
+        anexos: []
+  - description: "Email é marcado como lido após abertura"
+    check:
+      side_effect:
+        email_lido: true
+
+failure_modes:
+  - "Email não pertence ao usuário: retorna 404"
+  - "Email não existe: retorna 404"

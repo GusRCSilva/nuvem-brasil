@@ -1,0 +1,55 @@
+feature: criar_filtro
+priority: P1
+category: email-server/pastas
+description: |
+  O usuário pode criar filtros para automatizar a organização
+  de emails recebidos com base em condições definidas.
+
+given:
+  - description: "Usuário autenticado acessa configurações"
+    setup:
+      view: configuracoes_filtros
+
+when:
+  - description: "Clica em 'Novo filtro'"
+    action:
+      click: botao_novo_filtro
+  - description: "Define condição: campo remetente contém 'notificacoes@empresa.com'"
+    action:
+      input:
+        condicao:
+          campo: remetente
+          operador: contem
+          valor: "notificacoes@empresa.com"
+  - description: "Define condição adicional: campo assunto contém 'Relatório'"
+    action:
+      input:
+        condicao:
+          campo: assunto
+          operador: contem
+          valor: "Relatório"
+  - description: "Define ação: mover para pasta 'Notificações'"
+    action:
+      input:
+        acao: mover_para_pasta
+        valor: "Notificações"
+  - description: "Define ação adicional: marcar como lido"
+    action:
+      input:
+        acao: marcar_como_lido
+  - description: "Salva o filtro"
+    action:
+      click: botao_salvar
+
+then:
+  - description: "Filtro aparece na lista de filtros ativos"
+    check:
+      filtro_listado: true
+  - description: "Emails futuros que atendem às condições são processados"
+    check:
+      filtro_ativo: true
+
+invariants:
+  - "Condições suportam os operadores: contém, não contém, é igual, começa com, termina com"
+  - "Filtros são avaliados na ordem em que aparecem na lista"
+  - "Filtros podem ser ativados/desativados sem exclusão"

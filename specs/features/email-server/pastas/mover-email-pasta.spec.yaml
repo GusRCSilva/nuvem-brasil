@@ -1,0 +1,38 @@
+feature: mover_email_pasta
+priority: P0
+category: email-server/pastas
+description: |
+  O usuário pode mover emails individualmente ou em lote
+  para qualquer pasta da sua conta.
+
+given:
+  - description: "Usuário está lendo um email ou tem emails selecionados"
+    setup:
+      emails_selecionados: 1..N
+
+when:
+  - description: "Clica no botão 'Mover para'"
+    action:
+      click: botao_mover_para
+  - description: "Seleciona a pasta de destino no seletor"
+    action:
+      selecionar_pasta: "Projetos"
+
+then:
+  - description: "Email é removido da pasta atual"
+    check:
+      email_ausente:
+        pasta: atual
+        email_id: selecionado
+  - description: "Email aparece na pasta de destino"
+    check:
+      email_presente:
+        pasta: "Projetos"
+        email_id: selecionado
+  - description: "Contador de emails não lidos é atualizado em ambas as pastas"
+    check:
+      contador_atualizado: true
+
+invariants:
+  - "Mover preserva o estado do email (lido/não lido, estrelado, etc.)"
+  - "Mover para a mesma pasta atual é uma operação nula"

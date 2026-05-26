@@ -1,0 +1,24 @@
+feature: token_expirado
+priority: P1
+category: email-server/mcp-server
+description: |
+  Quando um token MCP atinge sua data de expiração, todas as
+  operações subsequentes são rejeitadas com erro de autenticação.
+  O token é marcado como expirado na interface do usuário.
+
+given:
+  - description: "Token MCP expirou (data de validade ultrapassada)"
+
+when:
+  - description: "Agente tenta qualquer operação usando o token expirado"
+
+then:
+  - description: "Agente recebe erro de autenticação 'Token expirado'"
+  - description: "Token aparece como 'Expirado' na lista de tokens do usuário"
+  - description: "Operação não é executada e não gera efeitos colaterais"
+
+failure_modes:
+  - "Token com data de expiração no futuro continua funcionando normalmente"
+
+invariants:
+  - "Validação de expiração ocorre a cada requisição, não apenas na conexão"

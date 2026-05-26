@@ -1,0 +1,29 @@
+feature: anexo_excede_limite
+priority: P1
+category: email-server/envio
+description: |
+  Ao tentar anexar um arquivo maior que o limite máximo de 25 MB,
+  o sistema deve rejeitar o arquivo e exibir uma mensagem informando o limite.
+
+given:
+  - description: "Estou compondo um email no editor"
+    setup:
+      page: email-compose-editor
+
+when:
+  - description: "Tento anexar um arquivo maior que 25 MB"
+    action:
+      type: file_select
+      file: arquivo_grande.bin
+      size_mb: 30
+
+then:
+  - description: "Vejo mensagem indicando que o arquivo excede o limite de 25 MB"
+    check:
+      notification:
+        type: error
+        text_contains: 25 MB
+  - description: "O arquivo não é anexado ao email"
+    check:
+      attachments:
+        count: 0

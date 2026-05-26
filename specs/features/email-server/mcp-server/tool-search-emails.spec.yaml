@@ -1,0 +1,21 @@
+feature: tool_search_emails
+priority: P0
+category: email-server/mcp-server
+description: |
+  Agente MCP autenticado pode buscar emails usando a tool search_emails
+  com parâmetros de query, pasta, limite e offset. O servidor retorna
+  uma lista paginada de emails correspondentes.
+
+given:
+  - description: "Agente MCP está autenticado com escopo email:read"
+
+when:
+  - description: "Agente chama search_emails com parâmetros de query, folder, limit e offset"
+
+then:
+  - description: "Servidor retorna lista de emails correspondentes com id, remetente, destinatários, assunto, trecho do corpo, data e flags"
+  - description: "Resultados respeitam os parâmetros limit e offset"
+  - description: "Busca vazia retorna lista vazia, não erro"
+
+failure_modes:
+  - "Parâmetros inválidos: servidor retorna erro 400 com descrição do parâmetro inválido"

@@ -1,0 +1,46 @@
+feature: termos_nao_aceitos
+priority: P1
+category: email-server/cadastro
+description: |
+  Validação de aceitação dos termos de uso no cadastro.
+  O cadastro não prossegue se o usuário não aceitar os termos de uso,
+  exibindo mensagem solicitando a aceitação.
+
+given:
+  - description: "Usuário está na página de cadastro"
+    setup:
+      page: /cadastro
+
+when:
+  - description: "Usuário preenche todos os campos obrigatórios"
+    action:
+      fill:
+        nome_completo: "Maria Silva"
+        username: "maria.silva"
+        email_alternativo: "maria@exemplo.com"
+        senha: "Senha@123"
+  - description: "Usuário não marca a opção de aceitar termos de uso"
+    action:
+      check:
+        aceita_termos: false
+  - description: "Usuário clica em Criar conta"
+    action:
+      click: btn-criar-conta
+
+then:
+  - description: "Mensagem solicitando aceitação dos termos é exibida"
+    check:
+      mensagem_contem: "Você precisa aceitar os termos de uso"
+  - description: "Conta não é criada"
+    check:
+      status_code: 422
+  - description: "Usuário permanece na página de cadastro"
+    check:
+      current_page: /cadastro
+
+invariants:
+  - "Termos de uso são sempre exibidos com link para o texto completo"
+  - "Data e hora da aceitação dos termos são registradas na conta"
+
+failure_modes:
+  - "Link dos termos de uso indisponível"

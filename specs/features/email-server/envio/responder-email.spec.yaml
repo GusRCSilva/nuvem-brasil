@@ -1,0 +1,36 @@
+feature: responder_email
+priority: P0
+category: email-server/envio
+description: |
+  Ao ler um email recebido, o usuário pode clicar em "Responder" para abrir
+  o editor com o campo "Para" preenchido com o remetente, assunto prefixado
+  com "Re:" e o email original citado no corpo.
+
+given:
+  - description: "Estou lendo um email recebido"
+    setup:
+      page: email-reader
+      email:
+        remetente: joao@exemplo.com
+        assunto: Convite para reunião
+        corpo: Olá, gostaria de convidar você para a reunião amanhã às 10h.
+
+when:
+  - description: "Clico no botão 'Responder'"
+    action:
+      type: click
+      target: Responder
+
+then:
+  - description: "O editor de composição abre"
+    check:
+      editor_opened: true
+  - description: "Campo 'Para' está preenchido com o remetente original"
+    check:
+      field_para: joao@exemplo.com
+  - description: "Assunto está prefixado com 'Re:'"
+    check:
+      field_assunto: "Re: Convite para reunião"
+  - description: "O email original está citado no corpo"
+    check:
+      body_contains_quoted: "Olá, gostaria de convidar você para a reunião amanhã às 10h."
